@@ -1,0 +1,1069 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Writer details page</title>    
+    <link rel="stylesheet" href="assets/writerpage.css">
+    <!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.0/css/all.min.css"> -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body >
+
+    <!-- --------------------------------------------------------------------------------------------------------- -->
+    <div class="top-ribbon">
+        <div>
+        <p class="top-ribbon-text">Moi App</p>
+      </div>
+      <div class="top-ribbon-icon">
+          <i class="fas fa-user-circle user-profile-icon" id="profile-icon"></i> 
+        </div>       
+      </div>
+
+    <!-- Pop-up menu -->
+    <div class="popup-menu" id="popup-menu">
+        <br>
+        <ul style="list-style-type: none; padding: 0px;">
+            <li style="color: white; margin-left: 20px; margin-top: -15px; margin-bottom: 9px; font-weight: bold;">Welcome, <span id="user-name"></span></li>
+        <li><a href="/changepassword" style="color: white; text-decoration: none;"><i class="fas fa-key  popup-menu-item" style="width: 20px;"></i>Change Password</a></li> 
+        <br>
+        <li><a href="/logout" style="color: white; text-decoration: none;"><i class="fas fa-sign-out-alt popup-menu-item" style="width: 20px;"></i>Logout</a></li>
+    </ul>
+    </div>
+
+    <div class="sidebar">
+        <nav>
+            <ul>
+                <li><a href="/home"><i class="fas fa-home" style="width: 30px;"></i>Home</a></li>
+                <li><a href="/customer"><i class="fas fa-user-plus" style="width: 30px;"></i>Customer Registration</a></li>
+                <li><a href="/writer" id="writer-registration-link"><i class="fas fa-pencil-alt" style="width: 30px;"></i>Writer Registration</a></li>
+                <li><a href="/changepassword"><i class="fas fa-key" style="width: 30px;"></i>Change Password</a></li>
+                <li><a href="/logout"><i class="fas fa-sign-out-alt" style="width: 30px;"></i>Logout</a></li>
+            </ul>
+        </nav>
+    </div>
+
+    <main>
+        <header>
+            <!-- Header content goes here -->
+        </header>
+
+        <div class="button-and-filter-container">
+        <button id="add-writer-button" class="add-button"> Add Writer <i class="fas fa-plus"></i></button>
+        <div class="filter-section">
+            <label for="filter-input">Filter by: </label>
+            <input type="text" id="filter-input" placeholder="Enter Name,Phone,Email,City...">
+            <button id="apply-filter" class="purple-button">Apply</button>
+            <button id="clear-filter" class="purple-button">Clear</button>
+        </div>
+    </div>
+         <section class="content">                       
+            <h2>Writer List</h2>
+            <div id="writer-details-table">
+                <!-- Writer details table will be populated here -->
+            </div>
+            <div id="pagination" class="center-pagination">
+                <button id="prev-page">Previous</button>
+                <button id="next-page">Next</button>
+            </div>
+
+<!----------------------------------- edit writer details form starts here ----------------------------------------->
+
+        <div id="editModal" class="editModal">
+            <div class="edit-modal-content">
+                <span class="close">&times;</span> 
+                <h2>Edit Writer</h2>                    
+                <form id="editWriterForm" class="two-column-form" >
+
+                    <input type="hidden" id="user_id" name="user_id" value="">
+                    <input type="hidden" id="writer_id" name="writer_id" value="">
+
+            <div class="form-column">
+                <div class="form-group">
+                    <label for="name" class="required-field">Name</label>
+                    <input type="text" id="name" name="name" placeholder="Writer name.." required>
+                </div>
+
+                <div class="form-group">
+                    <label for="email" class="required-field">E-mail</label>
+                    <input type="email" id="email" name="email" placeholder="Writer E-mail address" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="gender" class="required-field">Gender</label>
+                    <select name="gender" id="gender">
+                      <option value="Male">Male</option>
+                      <option value="Female">Female</option>
+                      <option value="Others">Others</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="writer_address" class="required-field">Address</label>
+                    <textarea name="writer_address" id="writer_address" placeholder="Writer Address.." style="height:50px" required></textarea>
+                </div>                
+            </div>
+
+            <div class="form-column">
+                
+                    <div class="form-group">
+                        <label for="phone_no" class="required-field">Phone Number</label>
+                        <input type="tel" name="phone_no" id="phone_no" placeholder="Writer phone no.." required pattern="[0-9]{10}">
+                        <small id="phone_no_error1" class="text-danger" style="color: red;">Please enter a 10-digit phone number.</small>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="dateofbirth" class="required-field">Date Of Birth</label>
+                        <input type="date" id="dateofbirth" name="dateofbirth" placeholder="Writer date of birth" required>
+                    </div>                
+                                
+                    <div class="form-group">
+                        <label for="writer_city" class="required-field">City</label>
+                        <input type="text" id="writer_city" name="writer_city" placeholder="Writer city.." required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="altphonenumber" class="required-field">Alternate Phone Number</label>
+                        <input type="tel" id="altphonenumber" name="altphonenumber" placeholder="Writer Alternate phone no.." required>
+                        <small id="altphonenumber_error1" class="text-danger" style="color: red;">Please enter a 10-digit phone number.</small>
+                    </div>
+            </div>
+                    <input type="submit" class="btn" value="Save Changes">
+                  </form>           
+                
+            </div>
+        </div>
+        
+        
+        <!------------------------ writer registration form starts here ---------------------------------->
+        
+        <div id="addModal" class="addModal">
+            <div class="add-modal-content">
+                <span class="close1">&times;</span> 
+                <h2>Writer Registration</h2>                    
+                <form id="writer-registration-form" class="two-column-form" >
+
+            <div class="form-column">
+                <div class="form-group">
+                    <label for="name" class="required-field">Name</label>
+                    <input type="text" id="add-name" name="name" placeholder="Writer name.." required>
+                </div>
+
+                <div class="form-group">
+                    <label for="email" class="required-field">E-mail</label>
+                    <input type="email" id="add-email" name="email" placeholder="Writer E-mail address" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="gender" class="required-field">Gender</label>
+                    <select id="add-gender" name="gender" >
+                      <option value="Male">Male</option>
+                      <option value="Female">Female</option>
+                      <option value="Others">Others</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="writer_address" class="required-field">Address</label>
+                    <textarea id="add-writer_address" name="writer_address" placeholder="Writer Address.." style="height:50px" required></textarea>
+                </div>                
+            </div>
+
+            <div class="form-column">
+                
+                    <div class="form-group">
+                        <label for="phone_no" class="required-field">Phone Number</label>
+                        <input type="tel" id="add-phone_no" name="phone_no" placeholder="Writer phone no.." required pattern="[0-9]{10}">
+                        <small id="phone_no_error" class="text-danger" style="color: red;">Please enter a 10-digit phone number.</small>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="dateofbirth" class="required-field">Date Of Birth</label>
+                        <input type="date" id="add-dateofbirth" name="dateofbirth" placeholder="Writer date of birth" required>
+                    </div>                
+                                
+                    <div class="form-group">
+                        <label for="writer_city" class="required-field">City</label>
+                        <input type="text" id="add-writer_city" name="writer_city" placeholder="Writer city.." required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="altphonenumber" class="required-field">Alternate Phone Number</label>
+                        <input type="tel" id="add-altphonenumber" name="altphonenumber" placeholder="Writer Alternate phone no.." required>
+                        <small id="altphonenumber_error" class="text-danger" style="color: red;">Please enter a 10-digit phone number.</small>
+                    </div>
+            </div>
+
+                    <input type="submit" class="btn" value="Submit">
+                  </form>           
+                
+            </div>
+        </div>
+            
+            
+        </section>
+    </main>
+
+    
+    <footer>
+        <p>&copy; 2023 MOI APP</p>
+    </footer>
+
+    </body>
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        // Get references to the content area and the "Customer Registration" link
+        const content = document.getElementById("writer-details-table");
+        const writerRegistrationLink = document.getElementById("writer-registration-link");
+        const paginationContainer = document.getElementById("pagination");
+        // Get the modal element
+        const eyeIcons = [];
+        const editIcons = [];
+        const deleteIcons = [];
+        const editWriterForm = document.getElementById("editWriterForm");
+        const closeBtn = document.querySelector(".close");
+        const dobElement = document.getElementById("dob");
+
+        let currentPage = 1;
+
+// =============================== TO POPULATE THE USER NAME IN THE POPUP MENU ==============================================
+            const name = sessionStorage.getItem("name");
+
+            const userNameSpan = document.getElementById("user-name");
+                if (userNameSpan) {
+                userNameSpan.textContent = name;
+                }
+//========================================================================================================================
+
+
+/*----------------------------------JavaScript to show/hide the pop-up menu starts here ---------------------------*/
+
+    const profileIcon = document.getElementById('profile-icon');
+    const popupMenu = document.getElementById('popup-menu');
+  
+      profileIcon.addEventListener('click', () => {
+        console.log("profile icon clicked");
+        popupMenu.style.display = (popupMenu.style.display === 'block') ? 'none' : 'block';
+      });
+  
+      // Close the pop-up menu when clicking outside of it
+      document.addEventListener('click', (e) => {
+        if (!popupMenu.contains(e.target) && e.target !== profileIcon) {
+          popupMenu.style.display = 'none';
+        }
+      });
+/*----------------------------------JavaScript to show/hide the pop-up menu ends here ---------------------------*/
+
+
+//-------------------------------------- Function to create an eye icon --------------------------------------------------
+        function createEyeIcon() {
+                const eyeIcon = document.createElement("i");
+                eyeIcon.classList.add("fas", "fa-eye");
+                eyeIcon.title = "View";
+                console.log("Eye icon created");
+                return eyeIcon;
+            }
+
+//-------------------------------------- Function to create an edit icon --------------------------------------------------
+        function createEditIcon() {
+                const editIcon = document.createElement("i");
+                editIcon.classList.add("fas", "fa-edit"); 
+                editIcon.title = "Edit"; 
+                //console.log("Edit icon created"); 
+                return editIcon;
+            }
+
+//------------------------------------- Function to create a delete icon -----------------------------------------------
+        function createDeleteIcon() {
+                const deleteIcon = document.createElement("i");
+                deleteIcon.classList.add("fas", "fa-trash"); 
+                deleteIcon.title = "Delete"; 
+                return deleteIcon;
+            }
+
+//------------------------------------- Filter functionality starts here -----------------------------------------------
+
+            const filterInput = document.getElementById("filter-input");
+            const applyFilterButton = document.getElementById("apply-filter");
+            const clearFilterButton = document.getElementById("clear-filter");
+            let filteredData = [];
+
+        applyFilterButton.addEventListener("click", function () {
+        const filterCriteria = filterInput.value.trim();
+        
+        if (filterCriteria === "") {
+            alert("Please enter a valid filter criteria.");
+            return; 
+        }
+
+        applyFilter(filterCriteria);
+        });
+
+            // Add event listener for the "Clear Filter" button
+        clearFilterButton.addEventListener("click", function () {
+            // Clear the filter input fields
+            filterInput.value = "";
+            
+            clearFilter();
+            //fetchAndDisplayWriterDetails();
+        });
+
+
+            // Function to apply the filter
+    function applyFilter(filterCriteria) {
+        // Fetch the writer data and filter based on phone and email
+        fetch("/get-writer-details")
+            .then(response => response.json())
+            .then(data => {
+                const filteredData = data.filter(writer => {                   
+                    
+                    const writerPhone = writer.phone_no.toLowerCase();
+                    const writerName = writer.name.toLowerCase();
+                    const writerCity = writer.writer_city.toLowerCase();
+                    const writerEmail = writer.email.toLowerCase();
+                    const writerAlternatePhoneNo = writer.writer_alternate_phone_no.toLowerCase();
+                    
+                    // Check if the writer's phone or email matches the filter criteria
+                    return (
+                        writerPhone.includes(filterCriteria.toLowerCase()) ||
+                        writerName.includes(filterCriteria.toLowerCase()) ||
+                        writerCity.includes(filterCriteria.toLowerCase()) ||
+                        writerEmail.includes(filterCriteria.toLowerCase()) ||
+                        writerAlternatePhoneNo.includes(filterCriteria.toLowerCase())
+                        );                        
+                });
+
+                console.log(filteredData);
+
+                currentPage = 1;
+                displayFilteredWriterDetails(filteredData);
+            })
+            .catch(error => {
+                console.error("Error fetching Writer details:", error);
+            });
+    }
+
+
+    // Function to display filtered writer details
+    function displayFilteredWriterDetails(filteredData) {
+        console.log("displayFilteredWriterDetails called");
+        const content = document.getElementById("writer-details-table");
+
+        console.log(filteredData.length);
+
+            // Clear the content area
+            content.innerHTML = "";
+
+            const rowsPerPage = 10;
+            totalPages = Math.ceil(filteredData.length / rowsPerPage);
+            console.log(totalPages);
+
+            // Update the pagination controls
+            paginationContainer.innerHTML = `
+            <button id="prev-page" ${currentPage === 1 ? 'disabled' : ''}>Previous</button>
+            <span>Page ${currentPage} of ${totalPages}</span>
+            <button id="next-page" ${currentPage === totalPages ? 'disabled' : ''}>Next</button>
+            `;
+
+            const table = document.createElement("table");
+            table.classList.add("writer-table");
+
+            // Create table headers
+            const headers = ["SI No", "Name", "Phone No", "Email", "Address", "City", "Actions"];
+            const headerRow = document.createElement("tr");
+            headers.forEach(headerText => {
+                const headerCell = document.createElement("th");
+                headerCell.textContent = headerText;
+                headerRow.appendChild(headerCell);
+            });
+            table.appendChild(headerRow);
+
+            // Create a container for the header
+            const headerContainer = document.createElement("div");
+            headerContainer.classList.add("header-container");
+            headerContainer.appendChild(table);
+
+            const rowContainer = document.createElement("div");
+            rowContainer.classList.add("row-container");
+
+            const startIndex = (currentPage - 1) * rowsPerPage;
+            const endIndex = startIndex + rowsPerPage;
+
+            let serialNumber = startIndex + 1 ;
+
+            const pageData = filteredData.slice(startIndex, endIndex);
+
+            console.log("pageData", pageData);
+            // Iterate through filtered data and create containers for each row
+            pageData.forEach(writer => {
+                // console.log(writer);
+
+                const row = document.createElement("tr");
+                const siNoCell = document.createElement("td");
+                siNoCell.textContent = serialNumber++;
+                row.appendChild(siNoCell);
+
+                const dob = new Date(writer.writer_dob);
+                const year = dob.getFullYear();
+                const month = (dob.getMonth() + 1).toString().padStart(2, '0');
+                const day = dob.getDate().toString().padStart(2, '0');
+                const formattedDob = `${year}-${month}-${day}`;
+
+                    const nameCell = document.createElement("td");
+                    const nameLink = document.createElement("a");
+                    nameLink.href = `writer_details.html?id=${writer.writer_id}`; 
+                    nameLink.style.textDecoration = "none";
+                    nameLink.textContent = writer.name;
+                    
+                    nameCell.appendChild(nameLink);
+                    row.appendChild(nameCell);
+
+                    nameLink.addEventListener("click", (e) => {
+                        e.preventDefault(); // Prevent the default link behavior
+                        // Navigate to the writer_details page with the specific writer's data
+                        window.location.href = nameLink.href;
+                    });
+
+                    const phoneNoCell = document.createElement("td");
+                    phoneNoCell.textContent = writer.phone_no;
+
+                    if (writer.writer_alternate_phone_no) {
+                        phoneNoCell.textContent += `, ${writer.writer_alternate_phone_no}`;
+                    }
+
+                    row.appendChild(phoneNoCell);
+
+                const cells = [
+                    // writer.name,
+                    // writer.phone_no,
+                    writer.email,                    
+                    writer.writer_address,
+                    writer.writer_city,                    
+                ];
+
+                cells.forEach((cellText, index) => {
+                    const cell = document.createElement("td");
+                    cell.textContent = cellText;
+                    row.appendChild(cell);
+
+                    if (index === cells.length - 1) {
+                        const actionsCell = document.createElement("td");
+
+                        // Create edit and delete icons
+                        const eyeIcon = createEyeIcon();
+                        const editIcon = createEditIcon();
+                        const deleteIcon = createDeleteIcon();
+
+                        eyeIcon.style.marginRight = "5px";
+                        editIcon.style.marginRight = "5px";
+
+                        eyeIcon.addEventListener("click", (e) => {
+                            e.preventDefault(); 
+                            window.location.href = nameLink.href;
+                        });
+
+                        actionsCell.appendChild(eyeIcon);
+                        actionsCell.appendChild(editIcon);
+                        actionsCell.appendChild(deleteIcon);
+
+                        row.appendChild(actionsCell);
+
+                        eyeIcons.push(eyeIcon);
+                        editIcons.push(editIcon);
+                        deleteIcons.push(deleteIcon);
+                    } else {
+                        row.appendChild(cell);
+                    }
+                });
+
+                table.appendChild(row);
+            });
+
+            // Append the table to the row container
+            rowContainer.appendChild(table);
+
+            // Append the header and rows container to the content area
+            content.appendChild(headerContainer);
+            content.appendChild(rowContainer);
+
+            let writer = {};
+
+            editIcons.forEach(editIcon => {
+                            editIcon.addEventListener("click", function () {
+                                console.log("Edit icon clicked"); 
+                                        // Get the customer data associated with the clicked row
+                                const row = editIcon.closest("tr");
+                                const phoneNo = row.cells[2].textContent.split(',')[0].trim();                
+
+                                fetch(`/api/get-writer-details-by-phone?phone=${phoneNo}`)
+                                    .then(response => response.json())
+                                    .then(data => {
+                                        console.log("data:",data);
+                                        const dob = new Date(data.writer_dob);
+                                        const year = dob.getFullYear();
+                                        const month = (dob.getMonth() + 1).toString().padStart(2, '0');
+                                        const day = dob.getDate().toString().padStart(2, '0');
+                                        const formattedDob = `${year}-${month}-${day}`;
+                                       const { phone_no,writer_alternate_phone_no,gender,writer_id ,user_id} = data; 
+                                       
+                                       console.log("user_id",user_id);
+                                       console.log("writer_id",writer_id);
+
+                                const writer = {
+                                    name: row.cells[1].textContent,
+                                    phone_no: phone_no,
+                                    email: row.cells[3].textContent,
+                                    writer_address: row.cells[4].textContent,                                    
+                                    writer_city: row.cells[5].textContent,
+                                    writer_alternate_phone_no: writer_alternate_phone_no,
+                                    gender: gender, 
+                                    dateofbirth: formattedDob,
+                                    writer_id : writer_id,
+                                    user_id: user_id,
+                                };
+                                console.log("calling displayEditForm from filtered");
+                                // Handle the edit action by opening the modal
+                                    displayEditForm(writer);
+                                });
+                            });
+                        });                               
+
+            deleteIcons.forEach(deleteIcon => {
+                // Inside your loop for creating rows and adding icons:
+                deleteIcon.addEventListener("click", function () {
+                    console.log("delete icon clicked"); 
+                    // Get the writer_id associated with the clicked row
+                    const row = deleteIcon.closest("tr");
+                    const phone_no = row.cells[2].textContent.split(',')[0].trim();                        
+                    console.log(phone_no);
+                    // Confirm if the user wants to delete
+                    const confirmDelete = confirm("Are you sure you want to delete this writer?");
+                    if (confirmDelete) {
+                        // Send an HTTP request to delete the writer with this writer_id
+                        fetch(`/delete-writer/${phone_no}`, {
+                            method: "DELETE",
+                        })
+                        .then(response => response.json())
+                        .then(data => {
+                            if (data.success) {
+                                alert("Writer deleted successfully");
+                                // Update the UI by fetching and displaying Writer details again
+                                fetchAndDisplayWriterDetails();
+                            } else {
+                                alert("Failed to delete Writer");
+                            }
+                        })
+                        .catch(error => {
+                            console.error("Error:", error);
+                            alert("An error occurred while deleting Writer");
+                        });
+                    }
+                });
+            });
+
+
+            const prevPageButton = document.getElementById("prev-page");
+                const nextPageButton = document.getElementById("next-page");
+
+                prevPageButton.addEventListener("click", function () {
+                    if (currentPage > 1) {
+                        currentPage--;
+                        displayFilteredWriterDetails(filteredData);
+                    }
+                });
+
+                nextPageButton.addEventListener("click", function () {
+                    if (currentPage < totalPages) {
+                        currentPage++;
+                        displayFilteredWriterDetails(filteredData);
+                    }
+                });       
+        }
+
+            const anchorTags = document.querySelectorAll('.sidebar ul li a');
+
+            // Add a click event listener to each anchor tag
+            anchorTags.forEach(anchor => {
+                anchor.addEventListener('click', () => {
+                    // Remove the 'clicked' class from all anchor tags
+                    anchorTags.forEach(a => a.classList.remove('clicked'));
+                    
+                    // Add the 'clicked' class to the clicked anchor tag
+                    anchor.classList.add('clicked');
+                });
+            });            
+        
+            const listItems = document.querySelectorAll('.sidebar nav ul li');
+
+            // Add a click event listener to each list item
+            listItems.forEach(item => {
+                item.addEventListener('click', () => {
+                    // Remove the 'clicked' class from all list items
+                    listItems.forEach(li => li.classList.remove('clicked'));
+                    
+                    // Add the 'clicked' class to the clicked list item
+                    item.classList.add('clicked');
+                });
+            });
+
+//--------------------------- Function to fetch and display writer details-----------------------------------------------
+        
+        function fetchAndDisplayWriterDetails() {
+            //console.log("fetchAndDisplayWriterDetails called");
+            fetch("/get-writer-details") // Replace with the actual URL
+                .then(response => response.json())
+                .then(data => {
+                    //console.log(data);
+                    
+                    // Clear the content area
+                    content.innerHTML = "";
+                    
+                    const rowsPerPage = 10;                              
+
+                    totalPages = Math.ceil(data.length / rowsPerPage);
+
+                     // Update the pagination controls
+                    paginationContainer.innerHTML = `
+                        <button id="prev-page" ${currentPage === 1 ? 'disabled' : ''}>Previous</button>
+                        <span>Page ${currentPage} of ${totalPages}</span>
+                        <button id="next-page" ${currentPage === totalPages ? 'disabled' : ''}>Next</button>
+                    `;
+
+                     // Create a table to display writer details
+                    const table = document.createElement("table");
+                    table.classList.add("writer-table");
+
+                    // Create table headers
+                    const headers = ["SI No", "Name", "Phone No", "Email", "Address", "City", "Actions"];
+                    const headerRow = document.createElement("tr");
+                    headers.forEach(headerText => {
+                        const headerCell = document.createElement("th");
+                        headerCell.textContent = headerText;
+                        headerRow.appendChild(headerCell);
+                    });
+                    table.appendChild(headerRow);
+
+                    // Create a container for the header
+                    const headerContainer = document.createElement("div");
+                    headerContainer.classList.add("header-container");
+                    headerContainer.appendChild(table);
+
+                    // Create a table for the row data
+                    const dataTable = document.createElement("table");
+                    dataTable.classList.add("data-table");                   
+                            
+                    // Calculate the start and end indexes for the current page
+                    const startIndex = (currentPage - 1) * rowsPerPage;
+                    const endIndex = startIndex + rowsPerPage;
+                    
+                    // Slice the data for the current page
+                    const pageData = data.slice(startIndex, endIndex); 
+                    
+                    const calculateSINo = (index) => {
+                        return startIndex + index + 1; // Add 1 to start from 1 instead of 0
+                    };
+                    
+            //Iterate through customer data and create containers for each row
+                pageData.forEach((writer, index) => {  
+                    //console.log("Inside loop for writer:", writer);                   
+
+                    const row = document.createElement("tr");
+
+                    const siNoCell = document.createElement("td");
+                    siNoCell.textContent = calculateSINo(index);
+                    row.appendChild(siNoCell);
+
+                    const nameCell = document.createElement("td");
+                    //nameCell.textContent = writer.name;
+                    const nameLink = document.createElement("a");
+                    nameLink.href = `writer_details.html?id=${writer.writer_id}`; 
+                    nameLink.style.textDecoration = "none";
+                    nameLink.textContent = writer.name;
+                    
+                    nameCell.appendChild(nameLink);
+                    row.appendChild(nameCell);
+
+                    nameLink.addEventListener("click", (e) => {
+                        e.preventDefault(); // Prevent the default link behavior
+                        // Navigate to the writer_details page with the specific writer's data
+                        window.location.href = nameLink.href;
+                    });
+
+                    const phoneNoCell = document.createElement("td");
+                    phoneNoCell.textContent = writer.phone_no;
+
+                    if (writer.writer_alternate_phone_no) {
+                        phoneNoCell.textContent += `, ${writer.writer_alternate_phone_no}`;
+                    }
+
+                    row.appendChild(phoneNoCell);
+
+                        const cells = [
+                            // writer.name,
+                            // writer.phone_no,
+                            writer.email,
+                            writer.writer_address,
+                            writer.writer_city,
+                            // writer.writer_alternate_phone_no,
+                            //writer.user_id,                            
+                        ];
+                        cells.forEach((cellText, index) => {
+                            const cell = document.createElement("td");
+                            cell.textContent = cellText;
+                            row.appendChild(cell); 
+
+                            if (index === cells.length -1) {
+                                const actionsCell = document.createElement("td");
+
+                                // Create eye, edit and delete icons
+                                const eyeIcon = createEyeIcon();
+                                const editIcon = createEditIcon();
+                                const deleteIcon = createDeleteIcon();                                
+
+                                eyeIcon.style.marginRight = "5px";
+                                editIcon.style.marginRight = "5px";
+
+                                eyeIcon.addEventListener("click", (e) => {
+                                    e.preventDefault(); 
+                                    //console.log("eye icon clicked");
+                                    window.location.href = nameLink.href;
+                                });
+
+                                actionsCell.appendChild(eyeIcon);
+                                actionsCell.appendChild(editIcon);
+                                actionsCell.appendChild(deleteIcon);
+
+                                row.appendChild(actionsCell);
+
+                                eyeIcons.push(eyeIcon);
+                                editIcons.push(editIcon);
+                                deleteIcons.push(deleteIcon);                                
+                                                         
+                            } else {
+                                row.appendChild(cell);
+                                }                            
+                        });
+
+                        table.appendChild(row);                                    
+                                          
+                        content.appendChild(headerContainer);
+                        content.appendChild(table);          
+                })
+
+
+                
+                //let writer = {};
+
+                editIcons.forEach(editIcon => {
+                            editIcon.addEventListener("click", function () {
+                                console.log("Edit icon clicked"); 
+                                        // Get the writer data associated with the clicked row
+                                const row = editIcon.closest("tr");
+                                //const phoneNo = row.cells[2].textContent;
+                                const phoneNo = row.cells[2].textContent.split(',')[0].trim();
+
+                                console.log(phoneNo);
+                                
+                                fetch(`/api/get-writer-details-by-phone?phone=${phoneNo}`)
+                                    .then(response => response.json())
+                                    .then(data => {
+                                        //console.log("data:",data);
+                                        const dob = new Date(data.writer_dob);
+                                        const year = dob.getFullYear();
+                                        const month = (dob.getMonth() + 1).toString().padStart(2, '0');
+                                        const day = dob.getDate().toString().padStart(2, '0');
+                                        const formattedDob = `${year}-${month}-${day}`;
+                                       const { phone_no,writer_alternate_phone_no,gender,writer_id ,user_id} = data; 
+                                       //console.log(formattedDob);
+                                const writer = {
+                                    name: row.cells[1].textContent,
+                                    phone_no: phone_no,
+                                    email: row.cells[3].textContent,
+                                    writer_address: row.cells[4].textContent,                                    
+                                    writer_city: row.cells[5].textContent,
+                                    writer_alternate_phone_no: writer_alternate_phone_no,
+                                    gender: gender, 
+                                    dateofbirth: formattedDob,
+                                    writer_id : writer_id,
+                                    user_id: user_id,
+                                };
+                                console.log("writer",writer);
+                                // Handle the edit action by opening the modal
+                                    displayEditForm(writer);
+                                });
+                            });
+                        });
+
+                deleteIcons.forEach(deleteIcon => {
+                // Inside your loop for creating rows and adding icons:
+                deleteIcon.addEventListener("click", function () {
+                    console.log("delete icon clicked"); 
+                    // Get the writer_id associated with the clicked row
+                    const row = deleteIcon.closest("tr");
+                    const phone_no = row.cells[2].textContent.split(',')[0].trim();                        
+                    //console.log(phone_no);
+                    // Confirm if the user wants to delete
+                    const confirmDelete = confirm("Are you sure you want to delete this writer?");
+                    if (confirmDelete) {
+                        // Send an HTTP request to delete the writer with this writer_id
+                        fetch(`/delete-writer/${phone_no}`, {
+                            method: "DELETE",
+                        })
+                        .then(response => response.json())
+                        .then(data => {
+                            if (data.success) {
+                                alert("Writer deleted successfully");
+                                // Update the UI by fetching and displaying Writer details again
+                                fetchAndDisplayWriterDetails();
+                            } else {
+                                alert("Failed to delete Writer");
+                            }
+                        })
+                        .catch(error => {
+                            console.error("Error:", error);
+                            alert("An error occurred while deleting Writer");
+                        });
+                    }
+                });
+            });                
+                })
+                .catch(error => {
+                    console.error("Error fetching Writer details:", error);
+                }); 
+             
+        // Add click event listeners to pagination buttons
+        paginationContainer.addEventListener("click", function (event) {
+            if (event.target.id === "prev-page" && currentPage > 1) {
+                currentPage--;
+                fetchAndDisplayWriterDetails();
+            } else if (event.target.id === "next-page" && currentPage < totalPages) {
+                currentPage++;
+                console.log("second page called");
+                fetchAndDisplayWriterDetails();
+            }
+        }); 
+                      
+        }
+
+            // Function to clear the filter and display all writer details
+            function clearFilter() {
+                // Fetch and display all writer details
+                fetchAndDisplayWriterDetails();
+            }
+
+
+        // Function to open the modal with Writer data
+        function displayEditForm(writer) {
+            console.log("displayEditForm called"); 
+            console.log("received user_id",writer.user_id);
+            console.log("received writer_id",writer.writer_id);
+            // Populate the form fields with Writer data
+            const modal = document.querySelector("#editModal");         
+            modal.style.display = "block";              
+
+            //document.querySelector(".content").style.display = "block";
+            document.querySelector("#editWriterForm input[name='writer_id']").value = writer.writer_id;
+            document.querySelector("#editWriterForm input[name='user_id']").value = writer.user_id;
+            document.querySelector("#editWriterForm input[name='name']").value = writer.name;
+            document.querySelector("#editWriterForm input[name='phone_no']").value = writer.phone_no;
+            document.querySelector("#editWriterForm input[name='email']").value = writer.email;
+            const genderSelect = document.querySelector("#editWriterForm select[name='gender']");
+            genderSelect.value = writer.gender;
+            document.querySelector("#editWriterForm input[name='dateofbirth']").value = writer.dateofbirth;
+            document.querySelector("#editWriterForm textarea[name='writer_address']").value = writer.writer_address;
+            document.querySelector("#editWriterForm input[name='writer_city']").value = writer.writer_city;
+            document.querySelector("#editWriterForm input[name='altphonenumber']").value = writer.writer_alternate_phone_no;
+            
+            // Initial validation for phone_no and altphonenumber
+            validatePhoneNoInput();
+            validateAltPhoneNoInput();
+    }
+
+function validatePhoneNoInput() {
+    var phoneNoInput = document.getElementById("phone_no").value;
+    var phoneNoError = document.getElementById("phone_no_error1");
+
+    if (/^\d{10}$/.test(phoneNoInput)) {
+        phoneNoError.style.display = "none";
+    } else {
+        phoneNoError.style.display = "block";
+    }
+}
+
+function validateAltPhoneNoInput() {
+    var altPhoneNoInput = document.getElementById("altphonenumber").value;
+    var altPhoneNoError = document.getElementById("altphonenumber_error1");
+
+    if (/^\d{10}$/.test(altPhoneNoInput)) {
+        altPhoneNoError.style.display = "none";
+    } else {
+        altPhoneNoError.style.display = "block";
+    }
+}
+
+    editWriterForm.addEventListener("submit", function (event) {
+            event.preventDefault();            
+            console.log("submit button clicked");
+            
+            const writer_id = document.getElementById('writer_id').value;
+            const name = document.getElementById('name').value;
+            const phone_no = document.getElementById('phone_no').value;
+            const email = document.getElementById('email').value;
+            const gender = document.getElementById('gender').value;
+            const dateofbirth = document.getElementById('dateofbirth').value;
+            const writer_address = document.getElementById('writer_address').value;
+            const writer_city = document.getElementById('writer_city').value;
+            const altphonenumber = document.getElementById('altphonenumber').value;
+            const user_id= document.getElementById('user_id').value;
+            
+           //const customerAddress = formData.get("customer_address");
+            fetch("/update-writer-data", {
+                method: "POST",
+                headers:{
+                    'Content-Type':'application/json',
+                 },
+                body: JSON.stringify({writer_id,name,phone_no,email,gender,dateofbirth,writer_address,writer_city,altphonenumber,user_id}),
+            })
+            .then(response => response.json())
+            .then(data => {
+                // console.log(data);
+                if (data.success) {
+                    alert("writer data updated successfully");
+                    fetchAndDisplayWriterDetails();
+                    // Handle success, e.g., close modal or update UI
+                } else {
+                    alert("Failed to update writer data");
+                    // Handle failure
+                }
+            })
+            .catch(error => {
+                console.error("Error:", error);
+                alert("An error occurred while updating writer data");
+            });
+            closeModal();
+        });
+    
+    
+const addWriterButton = document.getElementById("add-writer-button");
+const addModal = document.getElementById("addModal");
+
+addWriterButton.addEventListener("click", function () {
+  addModal.style.display = "block";
+});
+
+const closeButton = document.querySelector(".close1");
+closeButton.addEventListener("click", function () {
+  addModal.style.display = "none";
+  form.reset();
+});
+        
+        // Function to close the modal
+        function closeModal() {
+            const editModal = document.querySelector(".editModal");
+            editModal.style.display = "none";
+            //editFormContainer.style.display = "none";
+            document.querySelector(".content").style.display = "block";
+            //content.style.display = "block"; // Show the writer details table           
+        }
+
+        // Add event listener to close button
+        closeBtn.addEventListener("click", closeModal);
+
+            
+        //Initially fetch and display writer details when the page loads
+        fetchAndDisplayWriterDetails();
+
+
+        document.getElementById("add-phone_no").addEventListener("input", function () {
+            var phoneNoInput = this.value;
+            var phoneNoError = document.getElementById("phone_no_error");
+
+            if (/^\d{10}$/.test(phoneNoInput)) {
+                phoneNoError.style.display = "none";
+            } else {
+                phoneNoError.style.display = "block";
+            }
+        });
+
+        document.getElementById("add-altphonenumber").addEventListener("input", function () {
+        var altPhoneNoInput = this.value;
+        var altPhoneNoError = document.getElementById("altphonenumber_error");
+
+        if (/^\d{10}$/.test(altPhoneNoInput)) {
+            altPhoneNoError.style.display = "none";
+        } else {
+            altPhoneNoError.style.display = "block";
+        }
+    });
+    
+    
+    document.getElementById("phone_no").addEventListener("input", function () {
+            var phoneNoInput = this.value;
+            var phoneNoError = document.getElementById("phone_no_error1");
+
+            if (/^\d{10}$/.test(phoneNoInput)) {
+                phoneNoError.style.display = "none";
+            } else {
+                phoneNoError.style.display = "block";
+            }
+        });
+
+        document.getElementById("altphonenumber").addEventListener("input", function () {
+        var altPhoneNoInput = this.value;
+        var altPhoneNoError = document.getElementById("altphonenumber_error1");
+
+        if (/^\d{10}$/.test(altPhoneNoInput)) {
+            altPhoneNoError.style.display = "none";
+        } else {
+            altPhoneNoError.style.display = "block";
+        }
+    });
+
+///////////////////------------ Add writer button click event starts (Writer Registration submission)-----------///////////////////////////////
+        
+        const form = document.getElementById('writer-registration-form');
+  
+  form.addEventListener('submit', function (event) {
+    event.preventDefault(); // Prevent default form submission
+    
+    // const formData = new FormData(form);
+    const name = document.getElementById('add-name').value;
+    const phone_no = document.getElementById('add-phone_no').value;
+    const email = document.getElementById('add-email').value;
+    const gender = document.getElementById('add-gender').value;
+    const dateofbirth = document.getElementById('add-dateofbirth').value;
+    const writer_address = document.getElementById('add-writer_address').value;
+    const writer_city = document.getElementById('add-writer_city').value;
+    const altphonenumber = document.getElementById('add-altphonenumber').value;
+    
+    fetch('/writersubmit', {
+      method: 'POST',
+      headers:{
+                  'Content-Type':'application/json',
+                 },
+      body: JSON.stringify({name,phone_no,email,gender,dateofbirth,writer_address,writer_city,altphonenumber}),
+    })
+    .then((response) => response.json())
+    .then((data) => {
+      if (data.success) {
+                        alert("Writer data inserted successfully");
+                        window.location.href = '/writer'; // Replace with your desired URL
+                        } else {
+                        alert("Failed to insert writer data");
+                            }
+      // alert(data); // Display the response from the server
+      form.reset(); // Clear the form
+    })
+    .catch((error) => {
+      console.error('Error:', error);
+      alert("An error occurred while inserting writer data");
+    });
+  }); 
+
+///////////////////--------------- Add writer button click event ends(Writer Registration submission)---------------///////////////////////////////
+        
+    });
+</script>
+
+</html>

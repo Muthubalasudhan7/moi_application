@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard</title>
+    <link rel="stylesheet" href="assets/writer_home.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    </head>
+<body >
+    <div class="top-ribbon">
+        <div>
+        <p class="top-ribbon-text">Moi App</p>
+      </div>
+      <div class="top-ribbon-icon">
+          <i class="fas fa-user-circle user-profile-icon" id="profile-icon"></i> 
+        </div>       
+      </div>
+
+     <!-- Pop-up menu -->
+<div class="popup-menu" id="popup-menu">
+  <br>
+  <ul style="list-style-type: none; padding: 0px;">
+    <li style="color: white; margin-left: 20px; margin-top: -15px; margin-bottom: 9px; font-weight: bold;">Welcome, <span id="user-name"></span></li>
+   <li><a href="/writerchangepassword" style="color: white; text-decoration: none;"><i class="fas fa-key  popup-menu-item" style="width: 20px;"></i>Change Password</a></li> 
+   <br>
+   <li><a href="/logout" style="color: white; text-decoration: none;"><i class="fas fa-sign-out-alt popup-menu-item" style="width: 20px;"></i>Logout</a></li>
+  <!---<div class="popup-menu-item">Logout</div> -->
+</ul>
+</div>
+  
+    <div class="sidebar">
+        <nav>
+            <ul>
+                <li><a href="/writer_home"><i class="fas fa-home" style="width: 30px;"></i>Home</a></li>
+                <li><a href="/visitorentry"><i class="fas fa-pencil-alt" style="width: 30px;"></i>Entry Page</a></li>
+                <li><a href="/writerchangepassword"><i class="fas fa-key" style="width: 30px;"></i>Change Password</a></li>
+                <li><a href="/logout"><i class="fas fa-sign-out-alt" style="width: 30px;"></i>Logout</a></li>
+            </ul>
+        </nav>
+    </div>
+
+    <main>
+        <header>
+            <!-- Header content goes here -->
+        </header>
+
+         <section class="content">
+            <h1>Function & Customer Details</h1>
+    
+            <div id="function-customer-details" class="function-customer-details-container">
+                <!-- Customer details will be displayed here -->
+                <div id="left-half">
+                 
+                </div>
+                <div id="right-half">
+                    
+                </div>
+            </div>
+            </section>
+    </main>
+
+    <!-- <footer>
+        <p>&copy; 2023 MOI APP</p>
+    </footer> -->
+</body>
+
+<script> 
+    
+    const writer_id = sessionStorage.getItem("writer_id");
+    const function_id = sessionStorage.getItem("function_id");
+    const name = sessionStorage.getItem("name");
+
+    const userNameSpan = document.getElementById("user-name");
+        if (userNameSpan) {
+        userNameSpan.textContent = name;
+        }
+
+    //==============================FOR GETTING THE SINGLE FUNCTION & CUSTOMER DATA STARTS HERE========================================================
+    fetch(`/get-single-function-customer-details?id=${function_id}`)
+        .then(response => response.json())
+        .then(data => {
+           
+            // Create tables for left-half and right-half
+            const customerDetailsContainer = document.getElementById('function-customer-details');    
+            const leftHalf = document.getElementById('left-half');                
+            const rightHalf = document.getElementById('right-half');         
+                              
+            const leftTable= document.createElement('table');
+            const rightTable= document.createElement('table');
+
+            leftTable.classList.add('left-table');
+            rightTable.classList.add('right-table');
+
+
+            // Create a function to add a row with a specified label and value to the left or right table
+            function addFunctionCustomerInfoRow(label, value, isLeftTable) {
+                //console.log('addCustomerInfoRow called');
+            const row = document.createElement('tr');
+            const labelCell = document.createElement('td');
+            labelCell.textContent = label;
+            labelCell.style.fontWeight = 'bold';
+            const valueCell = document.createElement('td');
+            valueCell.textContent = value;
+            row.appendChild(labelCell);
+            row.appendChild(valueCell);
+
+            const targetTable = isLeftTable ? leftTable : rightTable;
+            targetTable.appendChild(row);
+            }
+
+            const rawDate = new Date(data.function_date);
+            const formattedDate = `${rawDate.getDate()}-${rawDate.getMonth() + 1}-${rawDate.getFullYear()}`;
+
+
+            // Add function information rows to the left table
+            addFunctionCustomerInfoRow('Function Name:', data.function_name, true);
+            addFunctionCustomerInfoRow('Function Date:', formattedDate, true);
+            addFunctionCustomerInfoRow('Function Address:', data.function_address, true);
+            addFunctionCustomerInfoRow('Function City:', data.function_city, true);
+
+            // Add customer information rows to the right table
+            addFunctionCustomerInfoRow('Customer Name:', data.name, false);
+            addFunctionCustomerInfoRow('Customer Phone No:', data.phone_no, false);
+            addFunctionCustomerInfoRow('Customer Alternate Phone No:', data.customer_alternate_phone_no, false);
+            addFunctionCustomerInfoRow('Customer Email:', data.email, false);
+
+            leftHalf.appendChild(leftTable);
+            rightHalf.appendChild(rightTable);
+
+            customerDetailsContainer.appendChild(leftHalf);
+            customerDetailsContainer.appendChild(rightHalf);
+
+            const clearFloat = document.createElement('div');
+            clearFloat.classList.add('clear-float');
+            customerDetailsContainer.appendChild(clearFloat);                    
+        })
+        .catch(error => {
+            console.error("Error fetching function  & customer details:", error);
+        });
+
+//==============================FOR GETTING THE SINGLE CUSTOMER DATA WHEN CLICKING THE NAME OF THE CUSTOMER ENDS HERE========================================================
+
+
+  /*--------------------------------------------------------------------------------------------*/
+       // JavaScript to show/hide the pop-up menu
+       const profileIcon = document.getElementById('profile-icon');
+       const popupMenu = document.getElementById('popup-menu');
+   
+       profileIcon.addEventListener('click', () => {
+         console.log("profile icon clicked");
+         popupMenu.style.display = (popupMenu.style.display === 'block') ? 'none' : 'block';
+       });
+   
+       // Close the pop-up menu when clicking outside of it
+       document.addEventListener('click', (e) => {
+         if (!popupMenu.contains(e.target) && e.target !== profileIcon) {
+           popupMenu.style.display = 'none';
+         }
+       });
+ //-------------------------------------------------------------------------------------------------------------------------
+       
+ </script>
+
+</html>

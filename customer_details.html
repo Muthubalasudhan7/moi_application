@@ -1,0 +1,819 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard</title>
+
+    <link rel="stylesheet" href="assets/customer_details.css">
+    <!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.0/css/all.min.css"> -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    </head>
+<body>
+    <div class="top-ribbon">
+        <div>
+        <p class="top-ribbon-text">Moi App</p>
+        </div>
+        <div class="top-ribbon-icon">
+        <i class="fas fa-user-circle user-profile-icon" id="profile-icon"></i> 
+        </div>       
+    </div>
+
+<!-- Pop-up menu -->
+<div class="popup-menu" id="popup-menu">
+    <br>
+    <ul style="list-style-type: none; padding: 0px;">
+        <li style="color: white; margin-left: 20px; margin-top: -15px; margin-bottom: 9px; font-weight: bold;">Welcome, <span id="user-name"></span></li>
+     <li><a href="/changepassword" style="color: white; text-decoration: none;"><i class="fas fa-key  popup-menu-item" style="width: 20px;"></i>Change Password</a></li> 
+     <br>
+     <li><a href="/logout" style="color: white; text-decoration: none;"><i class="fas fa-sign-out-alt popup-menu-item" style="width: 20px;"></i>Logout</a></li>
+    <!---<div class="popup-menu-item">Logout</div> -->
+  </ul>
+  </div>
+
+    <div class="sidebar">
+        <nav>
+            <ul>
+                <li><a href="/home"><i class="fas fa-home" style="width: 30px;"></i>Home</a></li>
+                <li><a href="/customer" id="customer-registration-link"><i class="fas fa-user-plus" style="width: 30px;"></i>Customer Registration</a></li>
+                <li><a href="/writer"><i class="fas fa-pencil-alt" style="width: 30px;"></i>Writer Registration</a></li>
+                <li><a href="/changepassword"><i class="fas fa-key" style="width: 30px;"></i>Change Password</a></li>
+                <li><a href="/logout"><i class="fas fa-sign-out-alt" style="width: 30px;"></i>Logout</a></li>
+            </ul>
+        </nav>
+    </div>
+
+    <main>
+        <header>
+            <!-- Header content goes here -->
+        </header>
+
+         <section class="content">
+            <h1>Customer Details</h1>
+    
+            <div id="customer-details" class="customer-details-container">
+                <!-- Customer details will be displayed here -->
+                <div id="left-half">
+                 
+                </div>
+                <div id="right-half">
+                    
+                </div>
+            </div>
+            <button id="add-function-button" class="add-button"> Add Function <i class="fas fa-plus"></i></button>
+
+            <h2>Function List</h2>
+            <div id="function-details-table">
+                <!-- function details table will be populated here -->
+            </div>
+            <div id="pagination" class="center-pagination">
+                <button id="prev-page">Previous</button>
+                <button id="next-page">Next</button>
+            </div>
+            
+            <div id="modal" class="modal">
+                <div class="modal-content">
+                    <span class="close">&times;</span> 
+                    <h2>Add Function</h2>                    
+                    <form id="function-registration-form">
+                                          
+                        <label for="functionname">Function Name</label>
+                        <input type="text" id="functionname" name="functionname" placeholder="Function name..">
+                                                        
+                        <label for="functiondate">Function Date</label>
+                        <input type="date" id="functiondate" name="functiondate" placeholder="Function date..">
+                                        
+                        <label for="functioncity">Function City</label>
+                        <input type="text" id="functioncity" name="functioncity" placeholder="Function city..">
+
+                        <label for="functionaddress">Function Address</label>
+                        <input type="text" id="functionaddress" name="functionaddress" style="height:40px" placeholder="Function Address..">
+
+                        <label for="writers">Assign Writer(s)</label>
+                        <select id="writers" name="writers[]" multiple>
+
+                        <input type="submit" class="btn" value="Submit">
+                        <!-- Form fields and buttons go here -->
+                    </form>
+                </div>
+            </div>
+            
+            
+            <div id="editModal" class="editModal">
+                <div class="edit-modal-content">
+                    <span class="close1">&times;</span> 
+                    <h2>Edit Function</h2>                    
+                    <form id="edit-function-form">
+
+                        <input type="hidden" id="function_id" name="function_id" value="">
+                                          
+                        <label for="editfunctionname">Function Name</label>
+                        <input type="text" id="editfunctionname" name="editfunctionname" placeholder="Function name..">
+                                                        
+                        <label for="editfunctiondate">Function Date</label>
+                        <input type="date" id="editfunctiondate" name="editfunctiondate" placeholder="Function date..">
+                                        
+                        <label for="editfunctioncity">Function City</label>
+                        <input type="text" id="editfunctioncity" name="editfunctioncity" placeholder="Function city..">
+
+                        <label for="editfunctionaddress">Function Address</label>
+                        <input type="text" id="editfunctionaddress" name="editfunctionaddress" placeholder="Function Address.." >
+
+                        <label for="assigned-writers">Assigned Writer(s)</label>
+                        <select id="assigned-writers" name="writers[]" multiple>
+                            </select>
+
+                        <input type="submit" class="btn" value="Save Changes">
+
+                        <!-- <input type="submit"  value="Submit"> -->
+                        <!-- Form fields and buttons go here -->
+                    </form>
+                </div>
+            </div>        
+         
+            </section>
+    </main>
+
+    <!-- <footer>
+        <p>&copy; 2023 MOI APP</p>
+    </footer> -->
+
+</body>
+
+<script>
+                      
+    // Extract the customer ID from the query parameter
+    const queryString = window.location.search;
+    const urlParams = new URLSearchParams(queryString);
+    const customer_id = urlParams.get('id');
+
+    const modal = document.getElementById('modal');
+    const closeButton = document.getElementById('close-modal');
+    
+    const addButton = document.getElementById('add-function-button');
+    const closeBtn = document.querySelector(".close");
+    const closeBtn1 = document.querySelector(".close1");
+
+    const writersSelect = document.getElementById('writers');
+
+    const functionRegistrationForm = document.getElementById("function-registration-form");
+
+    const content = document.getElementById("function-details-table");
+    const paginationContainer = document.getElementById("pagination");
+    const editIcons = [];
+    const deleteIcons = [];
+
+    let currentPage = 1;// Initialize the current page
+    let totalPages; // Declare totalPages variable
+    const rowsPerPage = 5; // Number of rows to display per page
+
+
+    //-------------------------------------- Function to create an eye icon --------------------------------------------------
+    function createEyeIcon() {
+                const eyeIcon = document.createElement("i");
+                eyeIcon.classList.add("fas", "fa-eye");
+                eyeIcon.title = "View";
+                console.log("Eye icon created");
+                return eyeIcon;
+            }
+
+    //------------------------------------- Function to create an edit icon ---------------------------------------------
+    function createEditIcon() {
+                const editIcon = document.createElement("i");
+                editIcon.classList.add("fas", "fa-edit"); // Font Awesome edit icon class
+                editIcon.title = "Edit"; // Tooltip for edit icon
+                //console.log("Edit icon created"); // Add this line
+                return editIcon;
+            }
+
+    //--------------------------------------- Function to create a delete icon -------------------------------------------------
+    function createDeleteIcon() {
+                const deleteIcon = document.createElement("i");
+                deleteIcon.classList.add("fas", "fa-trash"); // Font Awesome delete icon class
+                deleteIcon.title = "Delete"; // Tooltip for delete icon
+                return deleteIcon;
+            }
+
+// =============================== TO POPULATE THE USER NAME IN THE POPUP MENU ==============================================
+const name = sessionStorage.getItem("name");
+
+const userNameSpan = document.getElementById("user-name");
+    if (userNameSpan) {
+    userNameSpan.textContent = name;
+    }
+
+//========================================================================================================================
+
+    /*--------------------------------------------------------------------------------------------*/
+      // JavaScript to show/hide the pop-up menu
+      const profileIcon = document.getElementById('profile-icon');
+      const popupMenu = document.getElementById('popup-menu');
+  
+      profileIcon.addEventListener('click', () => {
+        console.log("profile icon clicked");
+        popupMenu.style.display = (popupMenu.style.display === 'block') ? 'none' : 'block';
+      });
+  
+      // Close the pop-up menu when clicking outside of it
+      document.addEventListener('click', (e) => {
+        if (!popupMenu.contains(e.target) && e.target !== profileIcon) {
+          popupMenu.style.display = 'none';
+        }
+      });
+//------------------------------------------------------------------------------------------------------------------------------------------------
+    
+    let user_id;
+//==============================FOR GETTING THE SINGLE CUSTOMER DATA WHEN CLICKING THE NAME OF THE CUSTOMER STARTS HERE========================================================
+    fetch(`/get-single-customer-details?id=${customer_id}`)
+        .then(response => response.json())
+        .then(data => {
+            user_id = data.user_id;
+            // row.dataset.user_id = data.user_id;
+           
+            // Create tables for left-half and right-half
+            const customerDetailsContainer = document.getElementById('customer-details');    
+            const leftHalf = document.getElementById('left-half');                
+            const rightHalf = document.getElementById('right-half');         
+                              
+            const leftTable= document.createElement('table');
+            const rightTable= document.createElement('table');
+
+            leftTable.classList.add('left-table');
+            rightTable.classList.add('right-table');
+
+
+            // Create a function to add a row with a specified label and value to the left or right table
+            function addCustomerInfoRow(label, value, isLeftTable) {
+                //console.log('addCustomerInfoRow called');
+            const row = document.createElement('tr');
+            const labelCell = document.createElement('td');
+            labelCell.textContent = label;
+            labelCell.style.fontWeight = 'bold';
+            const valueCell = document.createElement('td');
+            valueCell.textContent = value;
+            row.appendChild(labelCell);
+            row.appendChild(valueCell);
+
+            const targetTable = isLeftTable ? leftTable : rightTable;
+            targetTable.appendChild(row);
+            }
+
+            const rawDate = new Date(data.customer_dob);
+            const formattedDate = `${rawDate.getDate()}-${rawDate.getMonth() + 1}-${rawDate.getFullYear()}`;
+
+
+            // Add customer information rows to the left table
+            //addCustomerInfoRow('Customer ID:', data.customer_id, true);
+            addCustomerInfoRow('Customer Name:', data.name, true);
+            addCustomerInfoRow('Customer Phone No:', data.phone_no, true);
+            addCustomerInfoRow('Customer Email:', data.email, true);
+            addCustomerInfoRow('Customer DOB:', formattedDate, true);
+
+            // Add customer information rows to the right table
+            addCustomerInfoRow('Customer Gender:', data.gender, false);
+            addCustomerInfoRow('Customer Address:', data.customer_address, false);
+            addCustomerInfoRow('Customer City:', data.customer_city, false);
+            addCustomerInfoRow('Customer Alternate Phone:', data.customer_alternate_phone_no, false);
+
+            leftHalf.appendChild(leftTable);
+            rightHalf.appendChild(rightTable);
+
+            customerDetailsContainer.appendChild(leftHalf);
+            customerDetailsContainer.appendChild(rightHalf);
+
+            const clearFloat = document.createElement('div');
+            clearFloat.classList.add('clear-float');
+            customerDetailsContainer.appendChild(clearFloat);                    
+        })
+        .catch(error => {
+            console.error("Error fetching customer details:", error);
+        });
+
+//==============================FOR GETTING THE SINGLE CUSTOMER DATA WHEN CLICKING THE NAME OF THE CUSTOMER ENDS HERE========================================================
+
+// Function to show the ADD modal
+            function showModal() {
+                modal.style.display = 'block';
+            }
+
+// Function to hide the ADD modal
+            function hideModal() {
+                modal.style.display = 'none';
+                functionRegistrationForm.reset();
+            }
+
+// Function to hide the EDIT modal
+            function hideEditModal() {
+                editModal.style.display = 'none';
+            }
+        
+        // Event listener for the "Add Function" button
+        addButton.addEventListener('click', showModal);
+
+        // Event listener for the close button
+        closeBtn.addEventListener("click", hideModal);
+
+        closeBtn1.addEventListener("click", hideEditModal);
+
+//==============================FOR GETTING ALL THE FUNCTION DETAILS OF THAT SINGLE CUSTOMER STARTS HERE========================================================
+
+        function fetchAndDisplayfunctionDetails() {
+            //console.log("fetchAndDisplayfunctionDetails called");
+            //console.log(customer_id);            
+
+            fetch(`/get-function-details?id=${customer_id}`)
+                .then(response => {
+                    if (!response.ok) {
+                        if (response.status === 404) {
+                            // Handle the case where the customer has no functions
+                            alert("This customer has no functions till now");
+                            return null;
+                        } else {
+                            throw new Error(`Error: ${response.status}`);
+                        }            
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    if(data!== null) {
+                    //console.log(data);
+                    const functionDetailsWithWriters = data;
+                    console.log(functionDetailsWithWriters);
+                                         
+                    content.innerHTML = "";
+                    totalPages = Math.ceil(functionDetailsWithWriters.length / rowsPerPage);
+
+                    // Update the pagination controls
+                    paginationContainer.innerHTML = `
+                        <button id="prev-page" ${currentPage === 1 ? 'disabled' : ''}>Previous</button>
+                        <span>Page ${currentPage} of ${totalPages}</span>
+                        <button id="next-page" ${currentPage === totalPages ? 'disabled' : ''}>Next</button>
+                    `;
+
+                    // Create a table to display customer details
+                    const table = document.createElement("table");
+                    table.classList.add("function-table");
+
+                    // Create table headers
+                    const headers = ["SI No", "Function Name", "Function Date", "Function Address", "Function City", "Writer Details", "Actions"];
+                    const headerRow = document.createElement("tr");
+                    headers.forEach(headerText => {
+                        const headerCell = document.createElement("th");
+                        headerCell.textContent = headerText;
+                        headerRow.appendChild(headerCell);
+                    });
+                    table.appendChild(headerRow);
+
+                    const headerContainer = document.createElement("div");
+                    headerContainer.classList.add("header-container");
+                    headerContainer.appendChild(table);
+
+                    // Create a container for the row
+                    const rowContainer = document.createElement("div");
+                    rowContainer.classList.add("row-container");
+
+                    // Calculate the start and end indexes for the current page
+                    const startIndex = (currentPage - 1) * rowsPerPage;
+                    const endIndex = startIndex + rowsPerPage;
+
+                    let serialNumber = startIndex + 1 ;
+                   
+                    // Slice the data for the current page
+                    const pageData = functionDetailsWithWriters.slice(startIndex, endIndex);
+
+                    console.log(pageData);
+
+                    pageData.forEach(functionDetailsWithWriter => { 
+                        const functionDetails = functionDetailsWithWriter.functionDetails;
+                        const writerDetails = functionDetailsWithWriter.writerDetails;
+
+                        const row = document.createElement("tr");
+
+                        const siNoCell = document.createElement("td");
+                        siNoCell.textContent = serialNumber++;
+                        row.appendChild(siNoCell);
+
+                        const nameCell = document.createElement("td");
+                        const nameLink = document.createElement("a");
+                        nameLink.href = `admin-visitor-entry?id=${functionDetails.function_id}`; 
+                        nameLink.style.textDecoration = "none";
+                        nameLink.textContent = functionDetails.function_name;
+
+                        nameCell.appendChild(nameLink);
+                        row.appendChild(nameCell);
+
+                        nameLink.addEventListener("click", (e) => {
+                            e.preventDefault(); // Prevent the default link behavior
+                            window.location.href = nameLink.href;
+                        });
+
+                            
+                        const cells = [
+                            //functionDetails.function_id,
+                            //functionDetails.function_name,
+                            formatDate(functionDetails.function_date),
+                            functionDetails.function_address,
+                            functionDetails.function_city,
+                            //writerDetails.map(writer => `${writer.name} - ${writer.phone_no}`).join(', '), 
+                            //writerIds.join(', '),
+                        ];
+
+                        
+                        //console.log(cells);
+                        cells.forEach((cellText, index) => {
+                            const cell = document.createElement("td");                            
+                                cell.textContent = cellText;
+                                row.appendChild(cell);
+
+                                if (index === cells.length -1){
+                                    //console.log("condition called");
+                                    const writerDetailsCell = document.createElement("td");
+                                    writerDetailsCell.textContent = writerDetails.map(writer => `${writer.name} - ${writer.phone_no}`).join(', ');
+
+                                    // Store the structured data in a data attribute
+                                    writerDetailsCell.dataset.writer_details = JSON.stringify(writerDetails);
+
+                                    row.appendChild(writerDetailsCell);
+                                }
+                            });
+                                
+                                    const actionsCell = document.createElement("td");
+
+                                    // Create eye, edit and delete icons
+                                    const eyeIcon = createEyeIcon();
+                                    const editIcon = createEditIcon();
+                                    const deleteIcon = createDeleteIcon();
+
+                                    eyeIcon.style.marginRight = "5px";
+                                    editIcon.style.marginRight = "5px";
+
+                                    // Append icons to the actionsCell
+                                    actionsCell.appendChild(eyeIcon);
+                                    actionsCell.appendChild(editIcon);
+                                    actionsCell.appendChild(deleteIcon);
+
+                                    row.appendChild(actionsCell);
+                                    editIcons.push(editIcon);
+                                    deleteIcons.push(deleteIcon);
+                                                       
+                        row.dataset.function_id = functionDetails.function_id;
+
+                        table.appendChild(row);                      
+                        
+                        content.appendChild(headerContainer);
+                        content.appendChild(table);
+                     
+                        })      
+                editIcons.forEach(editIcon => {
+                            editIcon.addEventListener("click", function () {
+                                //console.log("Edit icon clicked"); 
+                                const row = editIcon.closest("tr");
+                                const function_id = row.dataset.function_id;
+                                //console.log("function_id",function_id);
+                                const writerDetailsData = JSON.parse(row.querySelector("[data-writer_details]").dataset.writer_details);
+                                //console.log("writer details data",writerDetailsData);
+
+
+                                const functions = {
+                                    function_id: function_id,
+                                    function_name: row.cells[1].textContent,                            
+                                    function_date: row.cells[2].textContent,
+                                    function_address: row.cells[3].textContent,                                    
+                                    function_city: row.cells[4].textContent,
+                                    writer_details : writerDetailsData,
+                                };
+
+                                    displayEditForm(functions);
+                                });
+                            });  
+                                                        
+                deleteIcons.forEach(deleteIcon => {
+                // Inside your loop for creating rows and adding icons:
+                deleteIcon.addEventListener("click", function () {
+                    console.log("delete icon clicked"); 
+                    const row = deleteIcon.closest("tr");
+                    const function_id = row.dataset.function_id;
+                    console.log(function_id);
+                    
+                    // Confirm if the user wants to delete
+                    const confirmDelete = confirm("Are you sure you want to delete this function?");
+                    if (confirmDelete) {
+                        // Send an HTTP request to delete the Function with this function_id
+                        fetch(`/delete-function/${function_id}/${user_id}`, {
+                            method: "DELETE",
+                        })
+                        .then(response => response.json())
+                        .then(data => {
+                            if (data.success) {
+                                alert("Function deleted successfully");
+                                // Update the UI by fetching and displaying Function details again
+                                fetchAndDisplayfunctionDetails();
+                            } else {
+                                alert("Failed to delete Function");
+                                fetchAndDisplayfunctionDetails();
+                            }
+                        })
+                        .catch(error => {
+                            console.error("Error:", error);
+                            alert("An error occurred while deleting Function");
+                        });
+                    }
+                });
+            });                                
+                        }else{
+                            const noFunctionsMessage = document.createElement("p");
+                            noFunctionsMessage.textContent = "This customer has no functions till now";
+                            content.appendChild(noFunctionsMessage);
+
+                            // Hide the pagination container
+                            paginationContainer.style.display = "none";
+                        }
+
+                })
+                
+                .catch(error => {
+                    console.error("Error:", error);
+                    alert("An error occurred while fetching function data");
+                });
+            }        
+            
+
+        function formatDate(inputDate) {
+            if (!inputDate) {
+                return ""; 
+            }
+            const functionDate = new Date(inputDate);
+            const year = functionDate.getFullYear();
+            const month = (functionDate.getMonth() + 1).toString().padStart(2, '0');
+            const day = functionDate.getDate().toString().padStart(2, '0');
+            return `${day}-${month}-${year}`;
+        }
+
+        // Function to open the modal with customer data
+        function displayEditForm(functions) {
+
+            console.log("fuctions",functions);
+            
+            const dateParts = functions.function_date.split('-');
+            //const functionDate = new Date(functions.function_date);
+
+            if (dateParts.length === 3) {    
+                    const year = dateParts[2];
+                    const month = String(dateParts[1]).padStart(2, '0'); 
+                    const day = String(dateParts[0]).padStart(2, '0');
+                    const formattedDob = `${year}-${month}-${day}`;
+                    //console.log(formattedDob);
+                   
+            const modal = document.querySelector("#editModal");
+            const editModalContent = document.querySelector(".edit-modal-content");
+            const editFunctionForm = document.querySelector("#edit-function-form");
+            const assignedWritersSelect = document.querySelector("#assigned-writers");
+
+            modal.style.display = "block";
+            editModalContent.style.display = "block";
+            editFunctionForm.style.display = "block";             
+
+            assignedWritersSelect.innerHTML = '';
+
+            const writerDetailsData = functions.writer_details;
+                //console.log(writerDetailsData);
+                writerDetailsData.forEach((writer) => {
+                    const option = document.createElement("option");
+                    option.value = writer.writer_id;
+                    option.textContent = `${writer.name} - ${writer.phone_no}`;
+                    option.selected = true;
+
+                    assignedWritersSelect.appendChild(option);                    
+                });
+
+            fetchWriterIds(formattedDob, 'edit-function-form')
+            .then((availableWriterIds) => {
+                //console.log("Available Writer IDs:", availableWriterIds);
+                availableWriterIds.forEach((writer) => {
+                    const option = document.createElement("option");
+                    option.value = writer.writer_id;
+                    option.textContent = `${writer.name} - ${writer.phone_no}`;
+                    assignedWritersSelect.appendChild(option);
+                });
+                // Select assigned writer IDs              
+               
+            });
+            
+            const editFunctionDateInput = document.getElementById('editfunctiondate');
+            editFunctionDateInput.addEventListener('blur', () => {
+
+                console.log("editFunctionDateInput event called");
+                const selectedDate = editFunctionDateInput.value;
+
+                console.log(selectedDate);
+                assignedWritersSelect.innerHTML = '';
+
+
+                writerDetailsData.forEach((writer) => {
+                    //console.log(writer);
+                    const writerId = writer.writer_id;
+                    //console.log(writerId);
+                    fetchWriterIds(selectedDate, 'edit-function-form')
+                    .then((availableWriters) => {
+                        console.log("avilable writer",availableWriters);
+                        // Check if the assigned writer ID is in the availableWriterIds array
+                        if (availableWriters.some(availableWriter => availableWriter.writer_id === writerId )) {
+                            const option = document.createElement("option");
+                        //console.log("condition called"); 
+                            option.value = writer.writer_id;
+                            option.textContent = `${writer.name} - ${writer.phone_no}`;
+                            option.selected = true;
+                            assignedWritersSelect.appendChild(option);
+                        }
+                    })
+                        .catch(error => {
+                        console.error("Error fetching writer IDs: ", error);
+                    });
+                });              
+
+
+                fetchWriterIds(selectedDate,'edit-function-form')
+                .then((data) => {
+                    //writersSelect.innerHTML = '';
+                    assignedWritersSelect.innerHTML = ''
+                    data.forEach(writer => {
+                        const option = document.createElement('option');
+                        option.value = writer.writer_id;
+                        option.textContent = `${writer.name} - ${writer.phone_no}`;
+                        assignedWritersSelect.appendChild(option);
+                    });
+                })
+                .catch(error => {
+                    console.error("An error occurred:", error);
+                });
+            });          
+            
+            document.querySelector("#edit-function-form input[name='function_id']").value = functions.function_id;
+            document.querySelector("#edit-function-form input[name='editfunctionname']").value = functions.function_name;                      
+            document.querySelector("#edit-function-form input[name='editfunctiondate']").value = formattedDob;
+            document.querySelector("#edit-function-form input[name='editfunctionaddress']").value = functions.function_address;           
+            document.querySelector("#edit-function-form input[name='editfunctioncity']").value = functions.function_city;
+        
+        } else {
+        console.error("Invalid date format: " + functions.function_date);
+    }            
+        }        
+
+        // Fetch writer IDs from the server
+    function fetchWriterIds(functionDate , formIdentifier) {
+        console.log("fetchwriterids function is called");        
+       return fetch(`/getWriterIds?functionDate=${functionDate}`)        
+        //.then(response => response.json())
+        .then(response => {
+                if (!response.ok) {
+                throw new Error(`HTTP error! Status: ${response.status}`);
+                }
+                return response.json();
+            })
+        .then(data => {
+            //console.log("Available Writer IDs:", data);
+            return data;
+        })                      
+            
+        .catch(error => {
+        console.error('Error fetching writer IDs:', error);
+        //console.log('Response Status:', error.response.status);
+        //console.log('Response Text:', error.response.text());
+    });
+    }
+
+    const functionDateInput = document.getElementById('functiondate');
+
+    functionDateInput.addEventListener('blur', () => {
+        const selectedDate = functionDateInput.value;
+        fetchWriterIds(selectedDate,'function-registration-form')
+        .then((data) => {
+            writersSelect.innerHTML = '';
+            data.forEach(writer => {
+                const option = document.createElement('option');
+                option.value = writer.writer_id;
+                option.textContent = `${writer.name} - ${writer.phone_no}`;
+                writersSelect.appendChild(option);
+            });
+        })
+        .catch(error => {
+            console.error("An error occurred:", error);
+        });
+
+    });
+
+
+    // Add click event listeners to pagination buttons
+    paginationContainer.addEventListener("click", function (event) {
+            if (event.target.id === "prev-page" && currentPage > 1) {
+                currentPage--;
+                fetchAndDisplayfunctionDetails();
+            } else if (event.target.id === "next-page" && currentPage < totalPages) {
+                currentPage++;
+                fetchAndDisplayfunctionDetails();
+            }
+        });
+
+
+// =================================== edit function form submission starts here ===================================================
+// Assuming you have an edit function form with an ID 'edit-function-form'
+const editFunctionForm = document.getElementById('edit-function-form');
+
+editFunctionForm.addEventListener("submit", function (event) {
+    event.preventDefault();
+
+    // Get the updated data from the edit form
+    const function_name = document.getElementById('editfunctionname').value;
+    const function_date = document.getElementById('editfunctiondate').value;
+    const function_city = document.getElementById('editfunctioncity').value;
+    const function_address = document.getElementById('editfunctionaddress').value;
+
+    console.log(function_name);
+    console.log(function_city);
+    console.log(function_address);
+    // Collect selected writer_ids as an array
+    const writersSelect1 = document.getElementById('assigned-writers');
+    const selectedWriters1 = Array.from(writersSelect1.selectedOptions).map(option => option.value);
+
+    console.log("user_id received",user_id);
+    // Get the function ID you want to update (You may have an input field for this)
+    const function_id = document.getElementById('function_id').value;
+
+    fetch("/update-function-data", {
+        method: "POST",
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ function_id, function_name, function_date, function_city, function_address,user_id, writer_ids: selectedWriters1, }),
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            alert("Function data updated successfully");
+            fetchAndDisplayfunctionDetails();
+            // You can optionally close the edit form or update the UI here
+        } else {
+            alert("Failed to update function data");
+            fetchAndDisplayfunctionDetails();
+        }
+    })
+    .catch(error => {
+        console.error("Error:", error);
+        alert("An error occurred while updating function data");
+    });
+    hideEditModal();
+    // You can hide the edit form or perform other actions as needed
+});
+
+
+
+// =================================== function registration form submission starts here ===================================================
+    functionRegistrationForm.addEventListener("submit", function (event) {
+            event.preventDefault();
+            // Handle the form submission here to update the customer data
+            const function_name = document.getElementById('functionname').value;
+            const function_date = document.getElementById('functiondate').value;
+            const function_city = document.getElementById('functioncity').value;
+            const function_address = document.getElementById('functionaddress').value;
+
+            console.log("user_id received",user_id);
+
+            // Collect selected writer_ids as an array
+            const writersSelect = document.getElementById('writers');
+            const selectedWriters = Array.from(writersSelect.selectedOptions).map(option => option.value);
+
+            console.log(selectedWriters);
+                
+            fetch("/insert-function-data", {
+                method: "POST",
+                headers:{
+                    'Content-Type':'application/json',
+                 },
+                body: JSON.stringify({function_name,function_date,function_city,function_address,customer_id,user_id,writer_ids:selectedWriters,}),
+            })
+            .then(response => response.json())
+            .then(data => {
+                // console.log(data);
+                if (data.success) {
+                    alert("Function data inserted successfully");
+                    functionRegistrationForm.reset();
+                    fetchAndDisplayfunctionDetails();
+                    // Handle success, e.g., close modal or update UI
+                } else {
+                    alert("Failed to insert function data");
+                    // Handle failure
+                    fetchAndDisplayfunctionDetails();
+                }
+            })
+            .catch(error => {
+                console.error("Error:", error);
+                alert("An error occurred while inserting function data");
+            });
+            hideModal();
+        });
+
+        fetchAndDisplayfunctionDetails();
+
+</script>
+
+</html>

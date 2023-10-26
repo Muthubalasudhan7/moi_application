@@ -1,0 +1,1091 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard</title>
+    <link rel="stylesheet" href="assets/customerpage.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.0/css/all.min.css">
+</head>
+<body>
+    <div class="top-ribbon">
+        <div>
+        <p class="top-ribbon-text">Moi App</p>
+        </div>
+        <div class="top-ribbon-icon">
+        <i class="fas fa-user-circle user-profile-icon" id="profile-icon"></i> 
+        </div>       
+    </div>
+
+<!-- Pop-up menu -->
+    <div class="popup-menu" id="popup-menu">
+    <br>
+        <ul style="list-style-type: none; padding: 0px;">
+            <li style="color: white; margin-left: 20px; margin-top: -15px; margin-bottom: 9px; font-weight: bold;">Welcome, <span id="user-name"></span></li>
+            <li><a href="/changepassword" style="color: white; text-decoration: none;"><i class="fas fa-key  popup-menu-item" style="width: 20px;"></i>Change Password</a></li> 
+            <br>
+            <li><a href="/logout" style="color: white; text-decoration: none;"><i class="fas fa-sign-out-alt popup-menu-item" style="width: 20px;"></i>Logout</a></li>
+        </ul>
+    </div>
+
+    <div class="sidebar">
+        <nav>
+            <ul>
+                <li><a href="/home"><i class="fas fa-home" style="width: 30px;"></i>Home</a></li>
+                <li><a href="/customer" id="customer-registration-link"><i class="fas fa-user-plus" style="width: 30px;"></i>Customer Registration</a></li> 
+                <li><a href="/writer"><i class="fas fa-pencil-alt" style="width: 30px;"></i>Writer Registration</a></li> 
+                <li><a href="/changepassword"><i class="fas fa-key" style="width: 30px;"></i>Change Password</a></li> 
+                <li><a href="/logout"><i class="fas fa-sign-out-alt" style="width: 30px;"></i>Logout</a></li>
+            </ul>
+        </nav>
+    </div>
+
+    <main>
+        <header>
+            <!-- Header content goes here -->
+        </header>
+
+        <div class="button-and-filter-container">
+        <button id="add-customer-button" class="add-button"> Add Customer <i class="fas fa-plus"></i></button>
+        <div class="filter-section">
+            <label for="filter-input">Filter by: </label>
+            <input type="text" id="filter-input" placeholder="Enter Name,Phone,Email,City..">
+            <button id="apply-filter" class="purple-button">Apply</button>
+            <button id="clear-filter" class="purple-button">Clear</button>
+        </div>
+    </div>
+         <section class="content">                       
+            <h2>Customer List</h2>
+            <div id="customer-details-table">
+                <!-- Customer details table will be populated here -->
+            </div>
+            <div id="pagination" class="center-pagination">
+                <button id="prev-page">Previous</button>
+                <button id="next-page">Next</button>
+            </div>
+
+
+            <!----------------------------------- edit writer details form starts here ----------------------------------------->
+
+        <div id="editModal" class="editModal">
+            <div class="edit-modal-content">
+                <span class="close">&times;</span> 
+                <h2>Edit Customer</h2>                    
+                <form id="editCustomerForm" class="two-column-form" >
+
+                    <input type="hidden" id="user_id" name="user_id" value="">
+                    <input type="hidden" id="customer_id" name="customer_id" value="">
+
+            <div class="form-column">
+                <div class="form-group">
+                    <label for="name" class="required-field">Name</label>
+                    <input type="text" id="name" name="name" placeholder="Customer name.." required>
+                </div>
+
+                <div class="form-group">
+                    <label for="email" class="required-field">E-mail</label>
+                    <input type="email" id="email" name="email" placeholder="Customer E-mail address" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="gender" class="required-field">Gender</label>
+                    <select name="gender" id="gender">
+                      <option value="Male">Male</option>
+                      <option value="Female">Female</option>
+                      <option value="Others">Others</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="customer_address" class="required-field">Address</label>
+                    <textarea name="customer_address" id="customer_address" placeholder="Customer Address.." style="height:50px" required></textarea>
+                </div>                
+            </div>
+
+            <div class="form-column">
+                
+                    <div class="form-group">
+                        <label for="phone_no" class="required-field">Phone Number</label>
+                        <input type="tel" name="phone_no" id="phone_no" placeholder="Customer phone no.." required >
+                        <small id="phone_no_error1" class="text-danger" style="color: red;">Please enter a 10-digit phone number.</small>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="dateofbirth" class="required-field">Date Of Birth</label>
+                        <input type="date" id="dateofbirth" name="dateofbirth" placeholder="Customer date of birth" required>
+                    </div>                
+                                
+                    <div class="form-group">
+                        <label for="customer_city" class="required-field">City</label>
+                        <input type="text" id="customer_city" name="customer_city" placeholder="Customer city.." required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="altphonenumber" class="required-field">Alternate Phone Number</label>
+                        <input type="tel" id="altphonenumber" name="altphonenumber" placeholder="Customer Alternate phone no.." required>
+                        <small id="altphonenumber_error1" class="text-danger" style="color: red;">Please enter a 10-digit phone number.</small>
+                    </div>
+            </div>
+                    <input type="submit" class="btn" value="Save Changes">
+                  </form>           
+                
+            </div>
+        </div>            
+
+<!------------------------ customer registration form starts here --------------------------------------------------->
+
+            <div id="addModal" class="addModal">
+                <div class="add-modal-content">
+                    <span class="close1">&times;</span> 
+                    <h2>Customer Registration</h2>                    
+                    <form id="customer-registration-form" class="two-column-form" >
+    
+                <div class="form-column">
+                    <div class="form-group">
+                        <label for="add-name" class="required-field">Name</label>
+                        <input type="text" id="add-name" name="name" placeholder="Customer name.." required>
+                    </div>
+    
+                    <div class="form-group">
+                        <label for="add-email" class="required-field">E-mail</label>
+                        <input type="email" id="add-email" name="email" placeholder="Customer E-mail address" required>
+                    </div>
+    
+                    <div class="form-group">
+                        <label for="add-gender" class="required-field">Gender</label>
+                        <select id="add-gender" name="gender">
+                          <option value="Male">Male</option>
+                          <option value="Female">Female</option>
+                          <option value="Others">Others</option>
+                        </select>
+                    </div>
+    
+                    <div class="form-group">
+                        <label for="add-customer_address" class="required-field">Address</label>
+                        <textarea id="add-customer_address" name="customer_address" placeholder="Customer Address.." style="height:50px" required></textarea>
+                    </div>                
+                </div>
+    
+                <div class="form-column">
+                    
+                        <div class="form-group">
+                            <label for="add-phone_no" class="required-field">Phone Number</label>
+                            <input type="tel" id="add-phone_no" name="phone_no" placeholder="Customer phone no.." required >
+                            <small id="phone_no_error" class="text-danger" style="color: red;">Please enter a 10-digit phone number.</small>
+                        </div>
+    
+                        <div class="form-group">
+                            <label for="add-dateofbirth" class="required-field">Date Of Birth</label>
+                            <input type="date" id="add-dateofbirth" name="dateofbirth" placeholder="Customer date of birth" required>
+                        </div>                
+                                    
+                        <div class="form-group">
+                            <label for="add-customer_city" class="required-field">City</label>
+                            <input type="text" id="add-customer_city" name="customer_city" placeholder="Customer city.." required>
+                        </div>
+    
+                        <div class="form-group">
+                            <label for="add-altphonenumber" class="required-field">Alternate Phone Number</label>
+                            <input type="tel" id="add-altphonenumber" name="altphonenumber" placeholder="Customer Alternate phone no.." required>
+                            <small id="altphonenumber_error" class="text-danger" style="color: red;">Please enter a 10-digit phone number.</small>
+                        </div>
+                    </div>
+
+                        <input type="submit" class="btn" value="Submit">
+                      </form>      
+                </div>
+            </div>
+
+<!------------------------ customer registration form ends here --------------------------------------------------->
+            
+        </section>
+    </main>
+
+    
+    <footer>
+        <p>&copy; 2023 MOI APP</p>
+    </footer>
+
+    
+</body>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        // Get references to the content area and the "Customer Registration" link
+        const content = document.getElementById("customer-details-table");
+        const customerRegistrationLink = document.getElementById("customer-registration-link");
+        const paginationContainer = document.getElementById("pagination");
+        // Get the modal element
+        const eyeIcons = [];
+        const editIcons = [];
+        const deleteIcons = [];
+        const editModal = document.getElementById("editModal");        
+        // Get the close button element
+        const closeBtn = document.querySelector(".close");
+
+        const dobElement = document.getElementById("dob");
+
+        //console.log("Script started running");
+
+        let currentPage = 1;// Initialize the current page
+        let totalPages; // Declare totalPages variable
+        // const rowsPerPage = 10;
+
+
+// =============================== TO POPULATE THE USER NAME IN THE POPUP MENU ==============================================
+const name = sessionStorage.getItem("name");
+
+const userNameSpan = document.getElementById("user-name");
+    if (userNameSpan) {
+    userNameSpan.textContent = name;
+    }
+
+//========================================================================================================================
+
+/*----------------------------------JavaScript to show/hide the pop-up menu starts here ---------------------------*/
+
+    const profileIcon = document.getElementById('profile-icon');
+    const popupMenu = document.getElementById('popup-menu');
+  
+      profileIcon.addEventListener('click', () => {
+        console.log("profile icon clicked");
+        popupMenu.style.display = (popupMenu.style.display === 'block') ? 'none' : 'block';
+      });
+  
+      // Close the pop-up menu when clicking outside of it
+      document.addEventListener('click', (e) => {
+        if (!popupMenu.contains(e.target) && e.target !== profileIcon) {
+          popupMenu.style.display = 'none';
+        }
+      });
+/*----------------------------------JavaScript to show/hide the pop-up menu ends here ---------------------------*/
+
+
+//-------------------------------------- Function to create an eye icon --------------------------------------------------
+            function createEyeIcon() {
+                const eyeIcon = document.createElement("i");
+                eyeIcon.classList.add("fas", "fa-eye");
+                eyeIcon.title = "View";
+                console.log("Eye icon created");
+                return eyeIcon;
+            }
+
+
+//-------------------------------------- Function to create an edit icon --------------------------------------------------
+            function createEditIcon() {
+                const editIcon = document.createElement("i");
+                editIcon.classList.add("fas", "fa-edit"); // Font Awesome edit icon class
+                editIcon.title = "Edit"; // Tooltip for edit icon
+                console.log("Edit icon created"); // Add this line
+                return editIcon;
+            }
+        
+//------------------------------------- Function to create a delete icon -----------------------------------------------
+            function createDeleteIcon() {
+                const deleteIcon = document.createElement("i");
+                deleteIcon.classList.add("fas", "fa-trash"); // Font Awesome delete icon class
+                deleteIcon.title = "Delete"; // Tooltip for delete icon
+                return deleteIcon;
+            }
+
+
+//------------------------------------- Filter functionality starts here -----------------------------------------------
+
+            const filterInput = document.getElementById("filter-input");
+            const applyFilterButton = document.getElementById("apply-filter");
+            const clearFilterButton = document.getElementById("clear-filter");
+            let filteredData = [];
+
+            applyFilterButton.addEventListener("click", function () {
+                const filterCriteria = filterInput.value.trim();
+                
+                if (filterCriteria === "") {
+                    alert("Please enter a valid filter criteria.");
+                    return; 
+                }
+                    applyFilter(filterCriteria);
+                });
+
+                    // Add event listener for the "Clear Filter" button
+                clearFilterButton.addEventListener("click", function () {
+                    // Clear the filter input fields
+                    filterInput.value = "";
+                    
+                    clearFilter();
+                });
+
+
+                    // Function to apply the filter
+            function applyFilter(filterCriteria) {
+                // Fetch the customer data and filter based on phone and email
+                fetch("/get-customer-details")
+                    .then(response => response.json())
+                    .then(data => {
+                        const filteredData = data.filter(customer => {
+
+                            const customerPhone = customer.phone_no.toLowerCase();
+                            const customerName = customer.name.toLowerCase();
+                            const customerCity = customer.customer_city.toLowerCase();
+                            const customerEmail = customer.email.toLowerCase();
+                            const customerAlternatePhoneNo = customer.customer_alternate_phone_no.toLowerCase();
+                            
+                            // Check if the customer's phone matches the filter criteria
+                            return (
+                                customerPhone.includes(filterCriteria.toLowerCase())||
+                                customerName.includes(filterCriteria.toLowerCase()) ||
+                                customerCity.includes(filterCriteria.toLowerCase()) ||
+                                customerEmail.includes(filterCriteria.toLowerCase()) ||
+                                customerAlternatePhoneNo.includes(filterCriteria.toLowerCase())
+                                );
+                        });
+
+                        console.log(filteredData);
+
+                        currentPage = 1;
+                        displayFilteredCustomerDetails(filteredData);
+                    })
+                    .catch(error => {
+                        console.error("Error fetching Customer details:", error);
+                    });
+            }
+
+
+                // Function to display filtered writer details
+    function displayFilteredCustomerDetails(filteredData) {
+        // Update the content area with the filtered data
+        const content = document.getElementById("customer-details-table");
+
+        console.log(filteredData.length);
+
+            content.innerHTML = "";
+
+            const rowsPerPage = 10;
+            totalPages = Math.ceil(filteredData.length / rowsPerPage);
+            console.log(totalPages);
+
+             // Update the pagination controls
+             paginationContainer.innerHTML = `
+            <button id="prev-page" ${currentPage === 1 ? 'disabled' : ''}>Previous</button>
+            <span>Page ${currentPage} of ${totalPages}</span>
+            <button id="next-page" ${currentPage === totalPages ? 'disabled' : ''}>Next</button>
+            `;
+
+            // Create a new table element
+            const table = document.createElement("table");
+            table.classList.add("customer-table");
+
+            // Create table headers
+            const headers = ["SI No", "Name", "Phone No", "Email", "Address", "City", "Actions"];
+            const headerRow = document.createElement("tr");
+            headers.forEach(headerText => {
+                const headerCell = document.createElement("th");
+                headerCell.textContent = headerText;
+                headerRow.appendChild(headerCell);
+            });
+            table.appendChild(headerRow);
+
+            // Create a container for the header
+            const headerContainer = document.createElement("div");
+            headerContainer.classList.add("header-container");
+            headerContainer.appendChild(table);
+
+            // Create a container for the row
+            const rowContainer = document.createElement("div");
+            rowContainer.classList.add("row-container");
+
+            const startIndex = (currentPage - 1) * rowsPerPage;
+            const endIndex = startIndex + rowsPerPage;
+
+            let serialNumber = startIndex + 1 ;
+
+            const pageData = filteredData.slice(startIndex, endIndex);
+
+            console.log("pageData", pageData);
+
+            // Iterate through filtered data and create containers for each row
+            pageData.forEach(customer => {
+
+                const row = document.createElement("tr");
+                const siNoCell = document.createElement("td");
+                siNoCell.textContent = serialNumber++;
+                row.appendChild(siNoCell);
+
+                const dob = new Date(customer.customer_dob);
+                const year = dob.getFullYear();
+                const month = (dob.getMonth() + 1).toString().padStart(2, '0');
+                const day = dob.getDate().toString().padStart(2, '0');
+                const formattedDob = `${year}-${month}-${day}`;
+
+                const nameCell = document.createElement("td");
+                    const nameLink = document.createElement("a");
+                    nameLink.href = `customer_details.html?id=${customer.customer_id}`; 
+                    nameLink.style.textDecoration = "none";
+                    nameLink.textContent = customer.name;
+
+                    nameCell.appendChild(nameLink);
+                    row.appendChild(nameCell);
+
+                    nameLink.addEventListener("click", (e) => {
+                        e.preventDefault(); // Prevent the default link behavior
+                        window.location.href = nameLink.href;
+                    });
+
+                    const phoneNoCell = document.createElement("td");
+                    phoneNoCell.textContent = customer.phone_no;
+
+                    if (customer.customer_alternate_phone_no) {
+                        phoneNoCell.textContent += `, ${customer.customer_alternate_phone_no}`;
+                    }
+
+                    row.appendChild(phoneNoCell);
+                
+               
+                const cells = [
+                    customer.email,
+                    customer.customer_address,
+                    customer.customer_city,
+                    ];
+
+                cells.forEach((cellText, index) => {
+                    const cell = document.createElement("td");
+                    cell.textContent = cellText;
+                    row.appendChild(cell);
+
+                    if (index === cells.length - 1) {
+                        const actionsCell = document.createElement("td");
+
+                        // Create eye, edit and delete icons
+                        const eyeIcon = createEyeIcon();
+                        const editIcon = createEditIcon();
+                        const deleteIcon = createDeleteIcon();
+
+                        eyeIcon.style.marginRight = "5px";
+                        editIcon.style.marginRight = "5px";
+                        eyeIcon.addEventListener("click", (e) => {
+                            e.preventDefault(); 
+                            //console.log("eye icon clicked");
+                            window.location.href = nameLink.href;
+                        });
+
+                        actionsCell.appendChild(eyeIcon);
+                        actionsCell.appendChild(editIcon);
+                        actionsCell.appendChild(deleteIcon);
+
+                        row.appendChild(actionsCell);
+
+                        eyeIcons.push(eyeIcon);
+                        editIcons.push(editIcon);
+                        deleteIcons.push(deleteIcon);
+                    } else {
+                        row.appendChild(cell);
+                    }
+                });
+
+                table.appendChild(row);
+            });
+
+            // Append the table to the row container
+            rowContainer.appendChild(table);
+
+            // Append the header and rows container to the content area
+            content.appendChild(headerContainer);
+            content.appendChild(rowContainer);
+
+            let writer = {};
+
+                    editIcons.forEach(editIcon => {
+                            editIcon.addEventListener("click", function () {
+                                console.log("Edit icon clicked"); 
+                                        // Get the customer data associated with the clicked row
+                                const row = editIcon.closest("tr");
+                                const phoneNo = row.cells[2].textContent.split(',')[0].trim(); 
+                                
+                                fetch(`/api/get-customer-details-by-phone?phone=${phoneNo}`)
+                                    .then(response => response.json())
+                                    .then(data => {
+                                        console.log("data:",data);
+                                        const dob = new Date(data.customer_dob);
+                                        const year = dob.getFullYear();
+                                        const month = (dob.getMonth() + 1).toString().padStart(2, '0');
+                                        const day = dob.getDate().toString().padStart(2, '0');
+                                        const formattedDob = `${year}-${month}-${day}`;
+                                       const { phone_no,customer_alternate_phone_no,gender,customer_id ,user_id} = data; 
+                                       
+                                       console.log("user_id",user_id);
+                                       console.log("customer_id",customer_id);
+
+                                const customer = {
+                                    name: row.cells[1].textContent,
+                                    phone_no: phone_no,
+                                    email: row.cells[3].textContent,
+                                    customer_address: row.cells[4].textContent,                                    
+                                    customer_city: row.cells[5].textContent,
+                                    customer_alternate_phone_no: customer_alternate_phone_no,
+                                    gender: gender, 
+                                    dateofbirth: formattedDob,
+                                    customer_id : customer_id,
+                                    user_id: user_id,
+                                };
+                                console.log("calling displayEditForm from filtered");
+                                // Handle the edit action by opening the modal
+                                    displayEditForm(customer);
+                                });
+                            });
+                        });
+
+            deleteIcons.forEach(deleteIcon => {
+                // Inside your loop for creating rows and adding icons:
+                deleteIcon.addEventListener("click", function () {
+                    console.log("delete icon clicked"); 
+                    // Get the user_id associated with the clicked row
+                    const row = deleteIcon.closest("tr");
+                    const phone_no = row.cells[2].textContent.split(',')[0].trim();                        
+                    console.log(phone_no);
+                    // Confirm if the user wants to delete
+                    const confirmDelete = confirm("Are you sure you want to delete this Customer?");
+                    if (confirmDelete) {
+                        // Send an HTTP request to delete the writer with this user_id
+                        fetch(`/delete-writer/${phone_no}`, {
+                            method: "DELETE",
+                        })
+                        .then(response => response.json())
+                        .then(data => {
+                            if (data.success) {
+                                alert("Customer deleted successfully");
+                                // Update the UI by fetching and displaying Customer details again
+                                fetchAndDisplayCustomerDetails();
+                            } else {
+                                alert("Failed to delete Customer");
+                            }
+                        })
+                        .catch(error => {
+                            console.error("Error:", error);
+                            alert("An error occurred while deleting Customer");
+                        });
+                    }
+                });
+            });  
+            
+            const prevPageButton = document.getElementById("prev-page");
+                const nextPageButton = document.getElementById("next-page");
+
+                prevPageButton.addEventListener("click", function () {
+                    if (currentPage > 1) {
+                        currentPage--;
+                        displayFilteredCustomerDetails(filteredData);
+                    }
+                });
+
+                nextPageButton.addEventListener("click", function () {
+                    if (currentPage < totalPages) {
+                        currentPage++;
+                        displayFilteredCustomerDetails(filteredData);
+                    }
+                });     
+
+        }
+
+
+            const anchorTags = document.querySelectorAll('.sidebar nav ul li a');
+
+            // Add a click event listener to each anchor tag
+            anchorTags.forEach(anchor => {
+                anchor.addEventListener('click', () => {
+                    // Remove the 'clicked' class from all anchor tags
+                    anchorTags.forEach(a => a.classList.remove('clicked'));
+                    
+                    // Add the 'clicked' class to the clicked anchor tag
+                    anchor.classList.add('clicked');
+                });
+            });            
+
+        
+            const listItems = document.querySelectorAll('.sidebar nav ul li');
+
+            // Add a click event listener to each list item
+            listItems.forEach(item => {
+                item.addEventListener('click', () => {
+                    // Remove the 'clicked' class from all list items
+                    listItems.forEach(li => li.classList.remove('clicked'));
+                    
+                    // Add the 'clicked' class to the clicked list item
+                    item.classList.add('clicked');
+                });
+            });
+
+
+        // Function to fetch and display customer details
+        function fetchAndDisplayCustomerDetails() {
+            // You should replace this with code to fetch and display customer details
+            fetch("/get-customer-details") // Replace with the actual URL
+                .then(response => response.json())
+                .then(data => {                      
+                    
+                    // Clear the content area
+                    content.innerHTML = "";
+
+                    const rowsPerPage = 10;                              
+
+                    totalPages = Math.ceil(data.length / rowsPerPage);
+
+                     // Update the pagination controls
+                    paginationContainer.innerHTML = `
+                        <button id="prev-page" ${currentPage === 1 ? 'disabled' : ''}>Previous</button>
+                        <span>Page ${currentPage} of ${totalPages}</span>
+                        <button id="next-page" ${currentPage === totalPages ? 'disabled' : ''}>Next</button>
+                    `;
+
+                     // Create a table to display customer details
+                    const table = document.createElement("table");
+                    table.classList.add("customer-table");
+
+                    // Create table headers
+                    const headers = ["SI No", "Name", "Phone No", "Email", "Address", "City", "Actions"];
+                    const headerRow = document.createElement("tr");
+                    headers.forEach(headerText => {
+                        const headerCell = document.createElement("th");
+                        headerCell.textContent = headerText;
+                        headerRow.appendChild(headerCell);
+                    });
+                    table.appendChild(headerRow);
+
+                    // Create a container for the header
+                    const headerContainer = document.createElement("div");
+                    headerContainer.classList.add("header-container");
+                    headerContainer.appendChild(table);
+
+                    // Create a table for the row data
+                    const dataTable = document.createElement("table");
+                    dataTable.classList.add("data-table");  
+
+                    // Create a container for the row
+                    // const rowContainer = document.createElement("div");
+                    // rowContainer.classList.add("row-container");
+                            
+                    // Calculate the start and end indexes for the current page
+                    const startIndex = (currentPage - 1) * rowsPerPage;
+                    const endIndex = startIndex + rowsPerPage;
+                    
+                    // Slice the data for the current page
+                    const pageData = data.slice(startIndex, endIndex);
+             
+                    const calculateSINo = (index) => {
+                        return startIndex + index + 1; // Add 1 to start from 1 instead of 0
+                    };
+
+            //Iterate through customer data and create containers for each row
+                pageData.forEach((customer, index) => {  
+                    console.log("Inside loop for customer:", customer);
+
+                    const row = document.createElement("tr");
+
+                    const siNoCell = document.createElement("td");
+                    siNoCell.textContent = calculateSINo(index);
+                    row.appendChild(siNoCell);
+
+
+                    const nameCell = document.createElement("td");
+                    //nameCell.textContent = writer.name;
+                    const nameLink = document.createElement("a");
+                    nameLink.href = `customer_details.html?id=${customer.customer_id}`; 
+                    nameLink.style.textDecoration = "none";
+                    nameLink.textContent = customer.name;
+                    
+                    nameCell.appendChild(nameLink);
+                    row.appendChild(nameCell);
+
+                    nameLink.addEventListener("click", (e) => {
+                        e.preventDefault(); // Prevent the default link behavior
+                        // Navigate to the writer_details page with the specific writer's data
+                        window.location.href = nameLink.href;
+                    });
+
+                    const phoneNoCell = document.createElement("td");
+                    phoneNoCell.textContent = customer.phone_no;
+
+                    if (customer.customer_alternate_phone_no) {
+                        phoneNoCell.textContent += `, ${customer.customer_alternate_phone_no}`;
+                    }
+
+                    row.appendChild(phoneNoCell);
+
+                    // const dob = new Date(customer.customer_dob);
+                    // const year = dob.getFullYear();
+                    // const month = (dob.getMonth() + 1).toString().padStart(2, '0');
+                    // const day = dob.getDate().toString().padStart(2, '0');
+                    // const formattedDob = `${year}-${month}-${day}`;
+
+                        const cells = [
+                            // customer.customer_id,                           
+                            customer.email,
+                            customer.customer_address,
+                            customer.customer_city,                                                      
+                        ];
+                        cells.forEach((cellText, index) => {
+                            const cell = document.createElement("td");
+                            cell.textContent = cellText;
+                            row.appendChild(cell); 
+
+                            if (index === cells.length -1) {
+                                const actionsCell = document.createElement("td");
+
+                                // Create eye, edit and delete icons 
+                                const eyeIcon = createEyeIcon();                               
+                                const editIcon = createEditIcon();
+                                const deleteIcon = createDeleteIcon();                                
+
+                                eyeIcon.style.marginRight = "5px";
+                                editIcon.style.marginRight = "5px";
+
+                                eyeIcon.addEventListener("click", (e) => {
+                                    e.preventDefault(); 
+                                    //console.log("eye icon clicked");
+                                    window.location.href = nameLink.href;
+                                });
+
+                                actionsCell.appendChild(eyeIcon);
+                                actionsCell.appendChild(editIcon);
+                                actionsCell.appendChild(deleteIcon);
+
+                                row.appendChild(actionsCell);
+
+                                eyeIcons.push(eyeIcon);
+                                editIcons.push(editIcon);
+                                deleteIcons.push(deleteIcon);
+                                 
+                            } else {
+                                row.appendChild(cell);
+                                }                            
+                        });
+
+                        table.appendChild(row);                              
+                       
+                        content.appendChild(headerContainer);
+                        content.appendChild(table);              
+                })     
+
+
+
+                editIcons.forEach(editIcon => {
+                            editIcon.addEventListener("click", function () {
+                                console.log("Edit icon clicked"); 
+                                        // Get the customer data associated with the clicked row
+                                const row = editIcon.closest("tr");
+                                const phoneNo = row.cells[2].textContent.split(',')[0].trim();                               
+
+                                console.log("getcustomerbynumberis called");
+                                fetch(`/api/get-customer-details-by-phone?phone=${phoneNo}`)                                
+                                    .then(response => response.json())
+                                    .then(data => {
+                                        console.log("getcustomerbynumberis called");
+                                        //console.log("data:",data);
+                                        const dob = new Date(data.customer_dob);
+                                        const year = dob.getFullYear();
+                                        const month = (dob.getMonth() + 1).toString().padStart(2, '0');
+                                        const day = dob.getDate().toString().padStart(2, '0');
+                                        const formattedDob = `${year}-${month}-${day}`;
+                                       const { phone_no,customer_alternate_phone_no,gender,customer_id ,user_id} = data; 
+                                       //console.log(formattedDob);
+                                const customer = {
+                                    name: row.cells[1].textContent,
+                                    phone_no: phone_no,
+                                    email: row.cells[3].textContent,
+                                    customer_address: row.cells[4].textContent,                                    
+                                    customer_city: row.cells[5].textContent,
+                                    customer_alternate_phone_no: customer_alternate_phone_no,
+                                    gender: gender, 
+                                    dateofbirth: formattedDob,
+                                    customer_id : customer_id,
+                                    user_id: user_id,
+                                };
+                                console.log("customer:",customer);
+                                // Handle the edit action by opening the modal
+                                    displayEditForm(customer);
+                                });                                                              
+                                
+                                });
+                            });
+
+                deleteIcons.forEach(deleteIcon => {
+                // Inside your loop for creating rows and adding icons:
+                deleteIcon.addEventListener("click", function () {
+                    console.log("delete icon clicked"); 
+                    // Get the customer_id associated with the clicked row
+                    const row = deleteIcon.closest("tr");
+                    const phone_no = row.cells[2].textContent.split(',')[0].trim(); 
+                    console.log(phone_no);
+                    // Confirm if the user wants to delete
+                    const confirmDelete = confirm("Are you sure you want to delete this customer?");
+                    if (confirmDelete) {
+                        // Send an HTTP request to delete the customer with this customer_id
+                        fetch(`/delete-customer/${phone_no}`, {
+                            method: "DELETE",
+                        })
+                        .then(response => response.json())
+                        .then(data => {
+                            if (data.success) {
+                                alert("Customer deleted successfully");
+                                // Update the UI by fetching and displaying customer details again
+                                fetchAndDisplayCustomerDetails();
+                            } else {
+                                alert("Failed to delete customer");
+                            }
+                        })
+                        .catch(error => {
+                            console.error("Error:", error);
+                            alert("An error occurred while deleting customer");
+                        });
+                    }
+                });
+            });
+
+                })
+                .catch(error => {
+                    console.error("Error fetching customer details:", error);
+                });               
+                
+        }
+            // Function to clear the filter and display all Customer details
+            function clearFilter() {
+                // Fetch and display all Customer details
+                fetchAndDisplayCustomerDetails();
+            }
+
+        // Function to open the modal with customer data
+        function displayEditForm(customer) {
+            console.log("displayEditForm called"); 
+            console.log("received user_id",customer.user_id);
+            console.log("received writer_id",customer.customer_id);
+            // Populate the form fields with customer data
+
+            //const modal1 = document.querySelector(".modal");
+            const modal = document.querySelector("#editModal");
+            
+            modal.style.display = "block";
+            
+            //document.querySelector(".content").style.display = "block";          
+            //console.log(customer.customer_address);       
+
+            document.querySelector("#editCustomerForm input[name='customer_id']").value = customer.customer_id;
+            document.querySelector("#editCustomerForm input[name='name']").value = customer.name;
+            document.querySelector("#editCustomerForm input[name='phone_no']").value = customer.phone_no;
+            document.querySelector("#editCustomerForm input[name='email']").value = customer.email;
+            const genderSelect = document.querySelector("#editCustomerForm select[name='gender']");
+            genderSelect.value = customer.gender;
+            document.querySelector("#editCustomerForm input[name='dateofbirth']").value = customer.dateofbirth;
+            document.querySelector("#editCustomerForm textarea[name='customer_address']").value = customer.customer_address;
+            document.querySelector("#editCustomerForm input[name='customer_city']").value = customer.customer_city;
+            document.querySelector("#editCustomerForm input[name='altphonenumber']").value = customer.customer_alternate_phone_no;
+            document.querySelector("#editCustomerForm input[name='user_id']").value = customer.user_id;
+
+            // Initial validation for phone_no and altphonenumber
+            validatePhoneNoInput();
+            validateAltPhoneNoInput();
+        }
+
+        function validatePhoneNoInput() {
+            var phoneNoInput = document.getElementById("phone_no").value;
+            var phoneNoError = document.getElementById("phone_no_error1");
+
+            if (/^\d{10}$/.test(phoneNoInput)) {
+                phoneNoError.style.display = "none";
+            } else {
+                phoneNoError.style.display = "block";
+            }
+        }
+
+    function validateAltPhoneNoInput() {
+        var altPhoneNoInput = document.getElementById("altphonenumber").value;
+        var altPhoneNoError = document.getElementById("altphonenumber_error1");
+
+        if (/^\d{10}$/.test(altPhoneNoInput)) {
+            altPhoneNoError.style.display = "none";
+        } else {
+            altPhoneNoError.style.display = "block";
+        }
+    }
+
+    // Add event listener to form submission
+    editCustomerForm.addEventListener("submit", function (event) {
+            event.preventDefault();
+            console.log("submit button clicked");
+            // Handle the form submission here to update the customer data
+            const customer_id = document.getElementById('customer_id').value;
+            const name = document.getElementById('name').value;
+            const phone_no = document.getElementById('phone_no').value;
+            const email = document.getElementById('email').value;
+            const gender = document.getElementById('gender').value;
+            const dateofbirth = document.getElementById('dateofbirth').value;
+            const customer_address = document.getElementById('customer_address').value;
+            const customer_city = document.getElementById('customer_city').value;
+            const altphonenumber = document.getElementById('altphonenumber').value;
+            const user_id= document.getElementById('user_id').value;
+                  
+            fetch("/update-customer-data", {
+                method: "POST",
+                headers:{
+                    'Content-Type':'application/json',
+                 },
+                body: JSON.stringify({customer_id,name,phone_no,email,gender,dateofbirth,customer_address,customer_city,altphonenumber,user_id}),
+            })
+            .then(response => response.json())
+            .then(data => {
+                // console.log(data);
+                if (data.success) {
+                    alert("Customer data updated successfully");
+                    fetchAndDisplayCustomerDetails();
+                    // Handle success, e.g., close modal or update UI
+                } else {
+                    alert("Failed to update customer data");
+                    // Handle failure
+                }
+            })
+            .catch(error => {
+                console.error("Error:", error);
+                alert("An error occurred while updating customer data");
+            });
+            closeModal();
+        });
+
+
+    const addCustomerButton = document.getElementById("add-customer-button");        
+    const addModal = document.getElementById("addModal");
+
+       addCustomerButton.addEventListener("click", function () {
+            addModal.style.display = "block";
+                //window.location.href = "/customerregister";
+            });
+
+    const closeButton = document.querySelector(".close1");
+        closeButton.addEventListener("click", function () {
+            addModal.style.display = "none";
+            form.reset();
+        });
+
+        // Function to close the modal
+        function closeModal() {
+            const editModal = document.querySelector(".editModal");
+            editModal.style.display = "none";
+            
+            document.querySelector(".content").style.display = "block";
+        }
+
+        // Add event listener to close button
+        closeBtn.addEventListener("click", closeModal);  
+        
+         
+
+        // Add click event listeners to pagination buttons
+        paginationContainer.addEventListener("click", function (event) {
+            if (event.target.id === "prev-page" && currentPage > 1) {
+                currentPage--;
+                fetchAndDisplayCustomerDetails();
+            } else if (event.target.id === "next-page" && currentPage < totalPages) {
+                currentPage++;
+                fetchAndDisplayCustomerDetails();
+            }
+        });
+              
+        //Initially fetch and display customer details when the page loads
+        fetchAndDisplayCustomerDetails();
+
+
+        document.getElementById("add-phone_no").addEventListener("input", function () {
+            var phoneNoInput = this.value;
+            var phoneNoError = document.getElementById("phone_no_error");
+
+            if (/^\d{10}$/.test(phoneNoInput)) {
+                phoneNoError.style.display = "none";
+            } else {
+                phoneNoError.style.display = "block";
+            }
+        });
+
+        document.getElementById("add-altphonenumber").addEventListener("input", function () {
+        var altPhoneNoInput = this.value;
+        var altPhoneNoError = document.getElementById("altphonenumber_error");
+
+        if (/^\d{10}$/.test(altPhoneNoInput)) {
+            altPhoneNoError.style.display = "none";
+        } else {
+            altPhoneNoError.style.display = "block";
+        }
+    });
+    
+    
+    document.getElementById("phone_no").addEventListener("input", function () {
+            var phoneNoInput = this.value;
+            var phoneNoError = document.getElementById("phone_no_error1");
+
+            if (/^\d{10}$/.test(phoneNoInput)) {
+                phoneNoError.style.display = "none";
+            } else {
+                phoneNoError.style.display = "block";
+            }
+        });
+
+        document.getElementById("altphonenumber").addEventListener("input", function () {
+        var altPhoneNoInput = this.value;
+        var altPhoneNoError = document.getElementById("altphonenumber_error1");
+
+        if (/^\d{10}$/.test(altPhoneNoInput)) {
+            altPhoneNoError.style.display = "none";
+        } else {
+            altPhoneNoError.style.display = "block";
+        }
+    });     
+        
+
+///////////////////------------ Add customer button click event starts (customer Registration submission)-----------///////////////////////////////
+        
+        const form = document.getElementById('customer-registration-form');
+  
+        form.addEventListener('submit', function (event) {
+            event.preventDefault(); // Prevent default form submission
+            
+            // const formData = new FormData(form);
+            const name = document.getElementById('add-name').value;
+            const phone_no = document.getElementById('add-phone_no').value;
+            const email = document.getElementById('add-email').value;
+            const gender = document.getElementById('add-gender').value;
+            const dateofbirth = document.getElementById('add-dateofbirth').value;
+            const customer_address = document.getElementById('add-customer_address').value;
+            const customer_city = document.getElementById('add-customer_city').value;
+            const altphonenumber = document.getElementById('add-altphonenumber').value;            
+        
+            fetch('/customersubmit', {
+            method: 'POST',
+            headers:{
+                        'Content-Type':'application/json',
+                        },
+            body: JSON.stringify({name,phone_no,email,gender,dateofbirth,customer_address,customer_city,altphonenumber}),
+            })
+            .then((response) => response.json())
+            .then((data) => {
+            if (data.success) {
+                                alert("Customer data inserted successfully");
+                                window.location.href = '/customer'; 
+                                } else {
+                                alert("Failed to insert customer data");
+                                window.location.href = '/customer'; 
+                                }
+            // alert(data); // Display the response from the server
+            form.reset(); // Clear the form
+            })
+            .catch((error) => {
+            console.error('Error:', error);
+            alert("An error occurred while inserting customer data");
+            });
+        }); 
+
+///////////////////--------------- Add writer button click event ends(Writer Registration submission)---------------///////////////////////////////
+
+
+        
+        
+
+
+    });
+</script>
+
+</html>

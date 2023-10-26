@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Login Page</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <link rel="stylesheet" href="assets/login.css">
+</head>
+<body>
+    <section class="box">
+        <div class="design">
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+        </div>
+        <div class="form">
+            <h1>Moi App</h1>
+            <h2>User Login</h2>
+            <form >
+            <!--  action="/login" method="POST"> -->
+                <input type="tel" name="phone_no" class="input-field" placeholder="Phone Number.." required/>
+
+                <div class="password-container">
+                <input type="password" name="password" id="currentPassword" class="input-field password-field" placeholder="Password.." required/>
+                <span id="PasswordToggle" class="password-toggle" onclick="togglePassword('currentPassword')">
+                    <i id="eyeIcon" class="fas fa-eye"></i>
+                </span>  
+            </div>            
+
+                <!-- <input type="password" name="password" id="currentPassword" class="input-field password-field" placeholder="Password.." required/>
+                <span id="PasswordToggle" class="password-toggle" onclick=togglePassword(currentPassword)>
+                    <i id="eyeIcon" class="fas fa-eye"></i>
+                  </span> -->
+
+                <input type="submit" class="btn" value = "LOGIN"/>
+            </form>
+            <br>
+            <div id="error-message" style="display: none; color: red;" class="error-message">
+                <i class="fas fa-exclamation-circle"></i>Username or password does not exist.
+            </div>
+            <div id="contact-admin-message" style="display: none; color: red;" class="error-message">
+                <i class="fas fa-exclamation-circle"></i>Please Contact Admin For Access.
+            </div>           
+            <a class="contact" href="/register" target="_blank">For Contact</a>
+        </div>
+        
+    </section>
+</body>
+
+<script>
+
+function togglePassword(inputId) {
+        const passwordInput = document.getElementById(inputId);
+        const eyeIcon = document.getElementById('eyeIcon');
+
+        if (passwordInput.type === 'password') {
+            passwordInput.type = 'text';
+            eyeIcon.classList.remove('fa-eye');
+            eyeIcon.classList.add('fa-eye-slash');
+        } else {
+            passwordInput.type = 'password';
+            eyeIcon.classList.remove('fa-eye-slash');
+            eyeIcon.classList.add('fa-eye');
+        }
+    }
+
+    document.addEventListener("DOMContentLoaded", function () {
+        // Get references to the form and error message elements
+        const loginForm = document.querySelector("form");
+        const errorMessage = document.getElementById("error-message");        
+        const contactAdminMessage = document.getElementById("contact-admin-message");        
+
+        // Add an event listener to the form submission
+        loginForm.addEventListener("submit", function (event) {
+            event.preventDefault(); // Prevent the default form submission behavior
+
+            // Get the username and password input values
+            const phone_no = loginForm.querySelector('input[name="phone_no"]').value;
+            const password = loginForm.querySelector('input[name="password"]').value;
+
+            console.log(phone_no);
+            console.log(password);              
+
+            errorMessage.style.display = "none";
+            contactAdminMessage.style.display = "none";
+
+            fetch("/login", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({username: phone_no, password: password })
+            })
+            .then(response => response.json())
+                .then (data => {                    
+                    if (data.success){
+                        if (data.redirect ==="/home"){
+                            sessionStorage.setItem("name", data.name);
+                            sessionStorage.setItem("user_id", data.user_id);
+                            //console.log(adminName);
+                            window.location.href = `/home`;
+                        } else if (data.redirect === "/writer_home") {
+                            if (data.function_id && data.writer_id && data.name && data.user_id && data.loggedInUserType) {
+                                sessionStorage.setItem("user_id", data.user_id);
+                                sessionStorage.setItem("loggedInUserType", data.loggedInUserType);
+                                sessionStorage.setItem("function_id", data.function_id);
+                                sessionStorage.setItem("writer_id", data.writer_id);
+                                sessionStorage.setItem("name", data.name);
+                            }
+                            window.location.href = "/writer_home";
+                        } else if (data.redirect === "/customer_home"){
+                            //console.log("customer home in client is called");
+                            if (data.function_id && data.customer_id && data.name && data.user_id && data.loggedInUserType) {
+                                sessionStorage.setItem("user_id", data.user_id);
+                                sessionStorage.setItem("loggedInUserType", data.loggedInUserType);
+                                sessionStorage.setItem("function_id", data.function_id);
+                                sessionStorage.setItem("customer_id", data.customer_id);
+                                sessionStorage.setItem("name", data.name);
+                            }
+                            window.location.href = "/customer_home";
+
+                        }   
+                    }else {
+                        if (data.message === "Username or password does not exist.") {
+                            // Show the "Username or password does not exist" error message
+                            errorMessage.style.display = "block";
+                            } else if (data.message === "Please contact admin for access.") {
+                            // Show the "Please contact admin for access" message
+                            contactAdminMessage.style.display = "block";
+                            } else {
+                            // Handle any other error cases here
+                            // errorMessage.style.display = "block";
+                        }
+                }                
+            })
+            .catch(error => {
+                console.error("Error:", error);
+            });
+        });       
+    });
+</script>
+
+
+</html>

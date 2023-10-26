@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard</title>
+
+    <link rel="stylesheet" href="assets/writer_details.css">
+    <!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.0/css/all.min.css"> -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    </head>
+<body>
+    <div class="top-ribbon">
+        <div>
+          <p class="top-ribbon-text">Moi App</p>
+        </div>
+        <div class="top-ribbon-icon">
+          <i class="fas fa-user-circle user-profile-icon" id="profile-icon"></i> 
+        </div>   
+    </div>
+
+<!-- Pop-up menu -->
+<div class="popup-menu" id="popup-menu">
+    <br>
+    <ul style="list-style-type: none; padding: 0px;">
+        <li style="color: white; margin-left: 20px; margin-top: -15px; margin-bottom: 9px; font-weight: bold;">Welcome, <span id="user-name"></span></li>
+        <li><a href="/changepassword" style="color: white; text-decoration: none;"><i class="fas fa-key  popup-menu-item" style="width: 20px;"></i>Change Password</a></li> 
+     <br>
+     <li><a href="/logout" style="color: white; text-decoration: none;"><i class="fas fa-sign-out-alt popup-menu-item" style="width: 20px;"></i>Logout</a></li>
+    <!---<div class="popup-menu-item">Logout</div> -->
+  </ul>
+  </div>
+
+    <div class="sidebar">
+        <nav>
+            <ul>
+                <li><a href="/home"><i class="fas fa-home" style="width: 30px;"></i>Home</a></li>
+                <li><a href="/customer" id="customer-registration-link"><i class="fas fa-user-plus" style="width: 30px;"></i>Customer Registration</a></li>
+                <li><a href="/writer"><i class="fas fa-pencil-alt" style="width: 30px;"></i>Writer Registration</a></li>
+                <li><a href="/changepassword"><i class="fas fa-key" style="width: 30px;"></i>Change Password</a></li>
+                <li><a href="/logout"><i class="fas fa-sign-out-alt" style="width: 30px;"></i>Logout</a></li>
+            </ul>
+        </nav>
+    </div>
+
+    <main>
+        <header>
+            <!-- Header content goes here -->
+        </header>
+
+         <section class="content">
+            <h1>Writer Details</h1>
+
+            <div class="toggle-button">
+                <label class="switch"> 
+                    <span class="label">Disable</span>
+                    <input type="checkbox" id="toggleWriterStatus">
+                    <span class="slider"></span>
+                </label>
+            </div>
+    
+            <div id="writer-details" class="writer-details-container">
+                <!-- Customer details will be displayed here -->
+            </div>            
+         
+        </section>
+    </main>
+
+    <!-- <footer>
+        <p>&copy; 2023 MOI APP</p>
+    </footer> -->
+
+</body>
+
+<script>
+                      
+    // Extract the customer ID from the query parameter
+    const queryString = window.location.search;
+    const urlParams = new URLSearchParams(queryString);
+    const writer_id = urlParams.get('id');
+
+    console.log(writer_id);    
+
+
+// =============================== TO POPULATE THE USER NAME IN THE POPUP MENU ==============================================
+const name = sessionStorage.getItem("name");
+
+const userNameSpan = document.getElementById("user-name");
+    if (userNameSpan) {
+    userNameSpan.textContent = name;
+    }
+
+//========================================================================================================================
+
+    /*--------------------------------------------------------------------------------------------*/
+      // JavaScript to show/hide the pop-up menu
+      const profileIcon = document.getElementById('profile-icon');
+      const popupMenu = document.getElementById('popup-menu');
+  
+      profileIcon.addEventListener('click', () => {
+        console.log("profile icon clicked");
+        popupMenu.style.display = (popupMenu.style.display === 'block') ? 'none' : 'block';
+      });
+  
+      // Close the pop-up menu when clicking outside of it
+      document.addEventListener('click', (e) => {
+        if (!popupMenu.contains(e.target) && e.target !== profileIcon) {
+          popupMenu.style.display = 'none';
+        }
+      });
+
+
+
+// --------------------------------- for updating the writer status using toggle ends here ----------------------------------------------------------------------------------
+
+
+//---------------------------------- Fetch the writer data using writer_id and display it--------------------------------------------------------------------------
+    
+    fetch(`/get-single-writer-details?id=${writer_id}`)
+        .then(response => response.json())
+        .then(data => {
+            
+            const writerDetailsContainer = document.getElementById('writer-details');    
+            
+            const table = document.createElement('table');
+            table.classList.add('writer-details-table');
+            
+            // Create a function to add a row with a specified label and value to the left or right table
+            function addCustomerInfoRow(label, value) {
+            const row = document.createElement('tr');
+            const labelCell = document.createElement('td');
+            labelCell.textContent = label;
+            labelCell.style.fontWeight = 'bold';
+            const valueCell = document.createElement('td');
+            valueCell.textContent = value;
+            row.appendChild(labelCell);
+            row.appendChild(valueCell);
+
+            table.appendChild(row);
+            }
+
+            console.log(data.user_id);
+
+            const rawDate = new Date(data.writer_dob);
+            const formattedDate = `${rawDate.getDate()}-${rawDate.getMonth() + 1}-${rawDate.getFullYear()}`;
+
+            addCustomerInfoRow('Writer Name:', data.name);
+            addCustomerInfoRow('Writer Phone No:', data.phone_no);
+            addCustomerInfoRow('Writer Email:', data.email);
+            addCustomerInfoRow('Writer DOB:', formattedDate);
+            addCustomerInfoRow('Writer Gender:', data.gender);
+            addCustomerInfoRow('Writer Address:', data.writer_address);
+            addCustomerInfoRow('Writer City:', data.writer_city);
+            addCustomerInfoRow('Writer Alternate Phone No:', data.writer_alternate_phone_no);
+            
+            writerDetailsContainer.appendChild(table);
+
+            const clearFloat = document.createElement('div');
+            clearFloat.classList.add('clear-float');
+            writerDetailsContainer.appendChild(clearFloat);   
+            
+// --------------------------------- for updating the writer status using toggle starts here ----------------------------------------------------------------------------------
+       
+            const toggleWriterStatus = document.getElementById("toggleWriterStatus");
+    
+                // Get the writer's ID or any other identifier you need to update the database
+            function getUserStatus() {
+                const user_id = data.user_id; // Replace with the actual writer's ID
+                console.log(user_id);
+
+                fetch(`/get-user-status?user_id=${user_id}`)
+                    .then((response) => response.json())
+                    .then((data) => {
+                        const userStatus = data.status; // Assuming the server responds with the user's status (0 or 1)
+
+                        // Set the initial state of the toggle button based on the user's status
+                        toggleWriterStatus.checked = userStatus === 0;
+
+                toggleWriterStatus.addEventListener("change", function () {
+                    const newStatus = toggleWriterStatus.checked ? 0 : 1; 
+                    console.log(newStatus);
+                    updateUserStatus(user_id, newStatus);
+                });
+            })
+            .catch((error) => {
+                console.error("Error fetching user status:", error);
+            });
+    }  
+
+        // Function to update the user's status on the server
+        function updateUserStatus(user_id, status) {
+                fetch("/update_writer_status", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify({
+                        user_id: user_id,
+                        status: status,
+                    }),
+                })
+                .then((response) => response.json())
+                .then((data) => {
+                    // Handle the response from the server
+                    console.log(data.message); 
+                })
+                .catch((error) => {
+                    console.error("Error updating user status:", error);
+                });
+            }
+
+            getUserStatus();
+        })
+        
+    
+</script>
+
+</html>

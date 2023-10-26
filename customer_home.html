@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Customer Home Page</title>
+    <link rel="stylesheet" href="assets/customer_home.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    </head>
+<body >
+
+  <div class="top-ribbon">
+    <div>
+    <p class="top-ribbon-text">Moi App</p>
+    </div>
+    <div class="top-ribbon-icon">
+      <div class="user-info">
+      <span class="user-info-text">customer-user</span>
+    <i class="fas fa-user-circle user-profile-icon" id="profile-icon"></i> 
+  </div>
+    </div>       
+  </div>
+
+     <!-- Pop-up menu -->
+<div class="popup-menu" id="popup-menu">
+  <br>
+  <ul style="list-style-type: none; padding: 0px;">
+    <li class="welcome-message" style="color: white; margin-left: 20px; margin-top: -15px; margin-bottom: 9px; font-weight: bold;">வணக்கம், <span id="user-name"></span></li>
+   <li><a href="/customer-change-password" class="menu-item" style="color: white; text-decoration: none;"><i class="fas fa-key  popup-menu-item" style="width: 20px;"></i>கடவுச்சொல் மாற்றும் பக்கம்</a></li> 
+   <br>
+   <li><a href="/logout" class="menu-item" style="color: white; text-decoration: none;"><i class="fas fa-sign-out-alt popup-menu-item" style="width: 20px;"></i>வெளியேறும் பக்கம்</a></li>
+  <!---<div class="popup-menu-item">Logout</div> -->
+</ul>
+</div>
+  
+    <div class="sidebar">
+        <nav>
+            <ul>
+                <li class="active"><a href="/customer_home"><i class="fas fa-home" style="width: 30px;"></i><span class="menu-item">முகப்பு பக்கம்</span></a></li>
+                <li><a href="/customer-visitor-entry"><i class="fas fa-pencil-alt" style="width: 30px;"></i><span class="menu-item">உள்ளீடுகள் பக்கம்</span></a></li>
+                <li><a href="/customer-change-password"><i class="fas fa-key" style="width: 30px;"></i><span class="menu-item">கடவுச்சொல் மாற்றும் பக்கம்</span></a></li>
+                <li><a href="/logout"><i class="fas fa-sign-out-alt" style="width: 30px;"></i><span class="menu-item">வெளியேறும் பக்கம்</span></a></li>
+            </ul>
+        </nav>
+    </div>
+
+    <main>
+        <header>
+            <!-- Header content goes here -->
+        </header>
+        <h1>முக்கிய விவரங்கள்</h1> 
+         <section class="content">
+
+            <div class="card">
+                <h3>விருந்தினர் எண்ணிக்கை</h3>
+                <p id="visitor-count-placeholder"></p>
+              </div> 
+              
+              <div class="card">
+                <h3>மொத்த தொகை</h3>
+                <p id="total-payment-placeholder"></p>
+              </div>
+            </section>
+    </main>
+
+    <!-- <footer>
+        <p>&copy; 2023 MOI APP</p>
+    </footer> -->
+
+  
+
+
+</body>
+
+<script>
+
+const customer_id = sessionStorage.getItem("customer_id");
+    const function_id = sessionStorage.getItem("function_id");
+    const name = sessionStorage.getItem("name");
+
+    console.log("function id in customer",function_id);
+    console.log("customer id in customer",customer_id);
+
+    const userNameSpan = document.getElementById("user-name");
+        if (userNameSpan) {
+        userNameSpan.textContent = name;
+        }
+
+// =================================== FOR GETTING THE VISITOR COUNT AND TOTAL PAYMENT TO DISPLAY IN CUSTOMER HOME PAGE=======================================  
+
+        fetch(`/get-visitor-count-total-payment?id=${function_id}`)
+            .then(response => response.json())
+            .then(data => {
+            document.getElementById('visitor-count-placeholder').textContent = data.totalVisitors;
+            document.getElementById('total-payment-placeholder').textContent = data.totalPayments;
+            })
+            .catch(error => {
+            console.error('Error fetching visitor count & total payment:', error);
+            //document.getElementById('customer-count-placeholder').textContent = 'Error';
+            });
+
+    
+
+  /*--------------------------------------------------------------------------------------------*/
+       // JavaScript to show/hide the pop-up menu
+       const profileIcon = document.getElementById('profile-icon');
+       const popupMenu = document.getElementById('popup-menu');
+   
+       profileIcon.addEventListener('click', () => {
+         console.log("profile icon clicked");
+         popupMenu.style.display = (popupMenu.style.display === 'block') ? 'none' : 'block';
+       });
+   
+       // Close the pop-up menu when clicking outside of it
+       document.addEventListener('click', (e) => {
+         if (!popupMenu.contains(e.target) && e.target !== profileIcon) {
+           popupMenu.style.display = 'none';
+         }
+       });
+ //-------------------------------------------------------------------------------------------------------------------------
+       
+ </script>
+
+</html>
