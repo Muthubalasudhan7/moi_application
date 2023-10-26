@@ -1,0 +1,235 @@
+/* Reset some default styles */
+body, h1, h2, ul {
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f2f2f2;
+    margin: 0;
+    padding: 0;
+}
+
+/*----------------------------------- Top ribbon CSS starts here ----------------------------------------------- */
+.top-ribbon {
+    background-color: #e2c4e0; 
+    height: 20px;
+    color: #fff;
+    text-align: center; 
+    padding: 10px 0px;
+    position: fixed;
+    top:0;
+    left:0;
+    right:0;
+    display: flex;
+    justify-content: flex-end; /* To align the icon to the right */
+    align-items: center;
+    width: 100%;
+    /* z-index: 1; */
+}
+
+.top-ribbon-text {
+    font-size: 16px;
+    margin-left: -3700%;
+    font-weight: bold;
+    color: #7f379b;
+  }
+
+  .user-info {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    position: relative;
+  }
+  
+  .user-info-text {
+    font-size: 16px;
+    font-weight: bold;
+    color: #7f379b;
+    margin-right: 15px;
+  }
+
+  .user-info-text:hover::before {
+    content: "You have customer access in this page";
+    position: absolute;
+    bottom:-60px;
+    left:30%;
+    transform: translateX(-50%);
+    top: 100%;    
+    background-color: #7f379b;
+    color: white;
+    padding: 5px;
+    min-width: 200px; 
+    border-radius: 5px;
+    display: none;
+  }
+  
+  .user-info-text:hover::before {
+    display: block;
+  }
+
+  .user-profile-icon {
+    font-size: 26px;
+    margin-right: 10px;   
+    cursor: pointer;
+    color: #800080;
+  }
+ 
+   /* Style for the pop-up menu */
+   .popup-menu {
+    display: none;
+    position: absolute;
+    background-color: #800080;
+    border: 1px solid #7f379b;
+    border-radius: 8px;
+    padding-left: 10px;
+    padding-bottom: 10px;
+    right: 30px;
+    height: 170px;
+    width: 220px;
+    top: 30px; 
+    z-index: 1;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+  }
+  
+  .welcome-message {
+    color: white;
+    font-weight: bold;
+    margin-bottom: 15px;
+  }
+
+  .popup-menu .menu-item {
+    display: block;
+    color: #e2c4e0; /* Text color for menu items */
+    text-decoration: none;
+    padding: 10px 0;
+    transition: background-color 0.3s, color 0.3s; /* Smooth hover effect */
+  }
+  
+.popup-menu .menu-item:hover {
+    color: #ffffff; /* Text color on hover */
+    background-color: #7f379b; /* Background color on hover */
+  }
+  
+  .popup-menu .menu-item i {
+    margin-right: 10px;
+  } 
+
+/* ------------------------------- top ribbon style ends here---------------------------------------------------- */
+
+/* --------------------------------- Sidebar style starts here -------------------------------------------------- */
+.sidebar {
+    background-color: #7f379b;
+    color: #FFFFFF;
+    width: 230px;
+    height: 90%;
+    position: fixed;
+    top: 0;
+    left: 0;
+    overflow-y: auto;
+    margin-top: 40px;
+    padding-top: 30px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start; 
+}
+
+nav ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+nav li {
+    display: flex;
+    align-items: center;
+}
+
+nav a {
+    display: flex;
+    align-items: center;
+    color: #FFFFFF;
+    text-decoration: none;
+    padding: 15px 20px;
+}
+
+/* Adjust the styles for icons and menu items as needed */
+.menu-item {
+    margin-left: 10px;
+}
+
+/* Add media queries to control layout on smaller screens */
+@media (max-width: 600px) {
+    .sidebar {
+        flex-direction: row;
+        align-items: center;
+        height: auto;
+        padding: 10px;
+        width: 100%;
+        overflow-y: visible;
+    }
+    
+    nav li {
+        margin: 0 10px;
+    }
+}
+
+.sidebar ul li a:hover,
+.sidebar ul li.active a {
+    color: #000000; /* Change the text color on hover or when active */
+}
+
+.sidebar ul li:hover,
+.sidebar ul li.active {
+    background-color: #e2c4e0; /* Change the background color on hover or when active */
+    transition: background-color 0.3s ease; /* Add a smooth transition effect */
+}
+/* --------------------------------- Sidebar style ends here -------------------------------------------------- */
+
+main {
+    margin-top: 30px;
+    margin-left: 250px; 
+    padding: 20px;
+}
+
+.content {
+    background-color: #FFFFFF; 
+    padding: 20px;
+    border-radius: 4px; 
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); 
+    display: flex; 
+    justify-content: space-evenly; 
+    flex-direction: row; 
+}
+
+h1 {
+    color: #7f379b; 
+    text-align: center;
+}
+
+.card {
+    width: 200px;
+    height: 150px;
+    background-color: #3498db;
+    color: white;
+    border-radius: 10px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+    margin: 10px 0; 
+}
+
+h3 {
+    font-size: 20px;
+    margin: 0;
+}
+
+p {
+    font-size: 40px;
+    font-weight: bold;
+    margin: 10px 0;
+}

@@ -1,0 +1,175 @@
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Roboto', sans-serif;
+    outline: none;
+    border: none;
+}
+
+body{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background: linear-gradient(-45deg,#7f379b,#ffa26c);
+}
+
+.box{
+    width: 900px;
+    height: 400px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #fff;
+    box-shadow: 0 0 15px #00000033;
+    border-radius: 15px;
+    overflow: hidden;
+}
+
+.design{
+    width: 50%;
+    height: 100%;
+    position: relative;
+}
+
+.design div:first-child{
+    width: 190px;
+    height: 90px;
+    border-radius: 50px;
+    background: linear-gradient(-90deg,#7f379b,#ff6a85);
+    transform: rotate(45deg);
+    position: absolute;
+    top: -40px;
+    left: 120px;
+}
+
+.design div:nth-child(2){
+    width: 450px;
+    height: 230px;
+    border-radius: 200px;
+    background: linear-gradient(-90deg,#7f379b,#ff6a85);
+    transform: rotate(45deg);
+    position: absolute;
+    top: 0;
+    left: -163px;
+    border: 25px solid #e2c4e0;
+}
+
+.design div:nth-child(3){
+    width: 190px;
+    height: 70px;
+    border-radius: 50px;
+    background: linear-gradient(-90deg,#7f379b,#ff92a6);
+    transform: rotate(45deg);
+    position: absolute;
+    bottom: 70px;
+    left: -100px;
+}
+
+.design div:last-child{
+    width: 190px;
+    height: 70px;
+    border-radius: 50px;
+    background: linear-gradient(-90deg,#7f379b,#ffa26c);
+    transform: rotate(45deg);
+    position: absolute;
+    bottom: -50px;
+    left: 100px;
+}
+
+.form{
+    width: 60%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    padding: 0 75px;
+    text-align: center;
+}
+
+.form h1{
+    margin-bottom: 15px;
+    margin-left: 20%;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    color : #7f379b;
+    font-size: xx-large;
+}
+
+.form h2{
+    margin-bottom: 15px;
+    margin-left: 18%;
+    font-size: medium;
+}
+
+.password-container {
+    position: relative;
+     width: 130%; 
+    display: flex;
+    align-items: center;
+}
+
+.input-field{
+    flex-grow: 2;
+    height: 40px;
+    width: 130%; 
+    border-radius: 5px;
+    margin: 10px 0;
+    padding: 15px;
+    font-size: 1em;
+    color: #000;
+    background-color: #e2c4e0;
+    letter-spacing: 1px;
+}
+
+.input-field::placeholder{
+    color: #303030;
+}
+
+.password-toggle {
+    position: absolute;
+    top: 50%;
+    right: 10px; /* Adjust the right distance as needed */
+    transform: translateY(-50%);
+    cursor: pointer;
+}
+
+
+/* Style the eye icon */
+.password-toggle i {
+    font-size: 1.2em;
+    color: #555;
+}
+
+.error-message{
+    margin-left: 17%;
+    margin-bottom: 5px;
+}
+
+.form a {
+    margin-left: 20%;
+}
+
+
+
+  
+ 
+  
+
+.btn{
+    width: 130%;
+    height: 40px;
+    background-color: #701e91;
+    color: #fff;
+    letter-spacing: 1px;
+    font-size: 1em;
+    margin-top: 15px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.btn:hover{
+    background-color: #800080;
+}
+

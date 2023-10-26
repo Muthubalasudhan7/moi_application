@@ -1,0 +1,233 @@
+/* Reset some default styles */
+body, h1, h2, ul {
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f2f2f2;
+    margin: 0;
+    padding: 0;
+}
+
+/*----------------------------------- Top ribbon CSS starts here ----------------------------------------------- */
+.top-ribbon {
+    background-color: #e2c4e0; 
+    height: 20px;
+    color: #fff;
+    text-align: center; 
+    padding: 10px 0px;
+    position: fixed;
+    top:0;
+    left:0;
+    right:0;
+    display: flex;
+    justify-content: flex-end; /* To align the icon to the right */
+    align-items: center;
+    width: 100%;
+    /* z-index: 1; */
+}
+
+.top-ribbon-text {
+  margin-left: -3700%;
+  font-weight: bold;
+  color: #7f379b;
+}
+
+.user-profile-icon {
+    font-size: 26px;
+    margin-right: 10px;   
+    cursor: pointer;
+    color: #800080;
+  }
+ 
+   /* Style for the pop-up menu */
+   .popup-menu {
+    display: none;
+    position: absolute;
+    background-color: #800080;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    padding: 10px;
+    right: 30px;
+    height: 100px;
+    width: 200px;
+    top: 30px; 
+    z-index: 1;
+  }
+  
+  /* Style for pop-up menu items */
+  .popup-menu-item {
+    cursor: pointer;
+    padding: 5px;
+  }
+
+  .popup-menu a:hover {
+    color: #e2c4e0; 
+    background-color: #7f379b; 
+  }
+
+/* ------------------------------- top ribbon style ends here---------------------------------------------------- */
+
+
+/*------------------------------------ Sidebar css starts here ------------------------------------------------------------*/
+.sidebar {
+    background-color: #7f379b; 
+    color: #FFFFFF;
+    width: 230px;
+    height: 90%;
+    position: fixed;
+    top: 0;
+    left: 0;
+    overflow-y: auto;
+    margin-top: 40px;
+    padding-top: 30px;
+}
+
+/* Add a hover effect for list items */
+.sidebar ul li:hover {
+    background-color: #e2c4e0; /* Change the background color on hover */
+    transition: background-color 0.3s ease; /* Add a smooth transition effect */
+}
+
+/* Style the anchor tags within list items */
+.sidebar ul li a {
+    text-decoration: none; /* Remove underline from links */
+    color: #000; /* Set the text color for links */
+    display: block; /* Make the entire list item clickable */
+    padding: 10px 15px; /* Add padding for better clickability */
+}
+
+/* Change the text color when hovering over the anchor tags */
+.sidebar ul li a:hover {
+    color: #000000; /* Change the text color on hover */
+}
+
+.sidebar nav ul {
+    list-style: none;
+}
+
+.sidebar nav ul li {
+    margin: 0;
+    padding: 10px;
+}
+
+.sidebar nav ul li a {
+    display: block;
+    text-decoration: none;
+    color: #FFFFFF;
+    padding: 10px 10px;
+}
+
+/*------------------------------------ Sidebar css ends here ------------------------------------------------------------*/
+
+
+/* ------------------------------------ toggle button css starts here ----------------------------------------------------- */
+
+.toggle-button {
+  position: relative;
+  top: -25px; 
+  float: right; 
+  margin-right: 10px; 
+  }
+
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 40px;
+  height: 20px;
+  }
+
+.switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+ }
+
+ .label {
+  font-size: medium;
+  color: #7f379b;
+  margin-left: -60px;
+font-weight: bold;  
+}
+
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #ccc;
+  -webkit-transition: .4s;
+  transition: .4s;
+  border-radius: 8px;
+}
+
+.slider:before {
+  position: absolute;
+  content: "";
+  height: 16px;
+  width: 16px;
+  left: 2px;
+  bottom: 2px;
+  background-color: white;
+  -webkit-transition: .4s;
+  transition: .4s;
+  border-radius: 7px;
+}
+
+input:checked + .slider {
+  background-color: #2196F3;
+}
+
+input:checked + .slider:before {
+  -webkit-transform: translateX(20px);
+  -ms-transform: translateX(20px);
+  transform: translateX(20px);
+}
+
+/* ------------------------------------ toggle button css ends here ----------------------------------------------------- */
+
+
+/*------------------------------------ Main content css starts here --------------------------------------------------------------*/
+
+main {
+    margin-top: 30px;
+    margin-left: 250px; 
+    padding: 20px;
+}
+
+#writer-details {
+    margin-top: 10px;
+    display: flex;
+    border: 1px solid #ccc;
+    justify-content: space-between;
+    padding: 7px;
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 5px;
+  }
+  
+   tr {
+    border-bottom: 1px solid #ccc;
+  }
+  
+  td {
+    padding: 8px;
+  } 
+
+  .writer-details-table tr:nth-child(odd) {
+    background-color: #d5d5d5;
+}
+
+  h1 {
+    color: #7f379b; 
+    text-align: center;
+}
+
+/*------------------------------------ Main content css ends here --------------------------------------------------------------*/
