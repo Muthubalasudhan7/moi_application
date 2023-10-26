@@ -1,0 +1,832 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Writer Vistor Entry Page</title>
+    <link rel="stylesheet" href="assets/writer_entry_page.css">    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <script src="https://www.google.com/jsapi" type="text/javascript"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.16.9/xlsx.full.min.js"></script>
+    <script src="https://unpkg.com/xlsx@0.17.1/dist/xlsx.full.min.js"></script>
+    <!-- <script src="https://unpkg.com/xlsx-style@0.9.0/dist/xlsx.full.min.js"></script> -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.14.0/xlsx.full.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.14.0/xlsx.full.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.14.0/jszip.js"></script>
+    <!-- <script src="https://cdn.jsdelivr.net/npm/exceljs/dist/exceljs.min.js"></script> -->
+
+    <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.14.0/xlsx-style.min.js"></script> -->
+    <script type="text/javascript"> 
+
+      google.load("visualization", "1", { packages: ["corechart"] });
+        // ============================= SCRIPT TO TRANSLATE ENGLISH TO TAMIL USING GOOGLE =============================================================
+        //google.load("elements", "1", {
+             //packages: "inputtools" 
+             // inputtools: {
+        //inputMethod: google.elements.inputmethod.TransliterationMethod.INDIC_TRANSLITERATION,
+        // Make sure you have the proper API key if required
+        //apiKey: 'YOUR_API_KEY',
+      //}           
+             // });      
+  
+          function onLoad() {
+            if (google.elements && google.elements.inputmethod) {
+              var options = {
+                inputMethod: google.elements.inputmethod.TransliterationMethod.INDIC_TRANSLITERATION,
+                sourceLanguage: google.elements.transliteration.LanguageCode.ENGLISH,
+                destinationLanguage: [google.elements.transliteration.LanguageCode.TAMIL],
+                shortcutKey: 'ctrl+q', // You can change this to your preferred shortcut key
+                transliterationEnabled: true
+              };
+          
+            var control = new google.elements.transliteration.TransliterationControl(options);
+            control.makeTransliteratable(['name']);
+  
+            var nameInput = document.getElementById('name');
+        nameInput.addEventListener('input', function() {
+          console.log("name event called");
+          var nameValue = nameInput.value;
+          // Automatically transliterate the user's input
+          var transliteratedName = control.transliterateString(nameValue);
+          nameInput.value = transliteratedName;
+        });
+          } else{
+            console.log("Google Input Tools API not available.");
+          }
+        }
+          google.setOnLoadCallback(function () {
+            onLoad(); // Call the Transliteration onLoad function
+            // Your Chart initialization code here
+          });
+        </script>
+   
+        
+    </head>
+<body >
+  <div class="top-ribbon">
+    <div>
+    <p class="top-ribbon-text">Moi App</p>
+    </div>
+    <div class="top-ribbon-icon">
+    <i class="fas fa-user-circle user-profile-icon" id="profile-icon"></i> 
+    </div>       
+</div>
+
+     <!-- Pop-up menu -->
+<div class="popup-menu" id="popup-menu">
+  <br>
+  <ul style="list-style-type: none; padding: 0px;">
+    <li style="color: white; margin-left: 20px; margin-top: -15px; margin-bottom: 9px; font-weight: bold;">Welcome, <span id="user-name"></span></li>
+    <li><a href="/changepassword" style="color: white; text-decoration: none;"><i class="fas fa-key  popup-menu-item" style="width: 20px;"></i>Change Password</a></li> 
+   <br>
+   <li><a href="/logout" style="color: white; text-decoration: none;"><i class="fas fa-sign-out-alt popup-menu-item" style="width: 20px;"></i>Logout</a></li>
+  <!---<div class="popup-menu-item">Logout</div> -->
+</ul>
+</div>  
+    <div class="sidebar">
+        <nav>
+            <ul>
+                <li><a href="/home"><i class="fas fa-home" style="width: 30px;"></i>Home</a></li>
+              <li><a href="/customer" id="customer-registration-link"><i class="fas fa-user-plus" style="width: 30px;"></i>Customer Registration</a></li>
+              <li><a href="/writer"><i class="fas fa-pencil-alt" style="width: 30px;"></i>Writer Registration</a></li>
+              <li><a href="/changepassword"><i class="fas fa-key" style="width: 30px;"></i>Change Password</a></li>
+              <li><a href="/logout"><i class="fas fa-sign-out-alt" style="width: 30px;"></i>Logout</a></li>
+            </ul>
+        </nav>
+    </div>
+
+    <main>
+        <header>
+            <!-- Header content goes here -->
+        </header>
+
+         <section class="content">
+            <!-- <h2>Visitor Entry Form</h2>
+           <br> -->
+            <form id="visitor-registration-form" >
+              
+              <div class="form-container">
+                <div class="form-group">
+                  <label for="phone_no" class="required-field">Phone Number</label>
+                  <input type="tel" id="phone_no" name="phone_no" onblur="validateAndAutofill()" required >
+                  <!-- <small id="phone_no_error" class="text-danger" style="color: red;">Please enter a 10-digit phone number.</small> -->
+                </div>
+
+                <div class="form-group">
+                  <label for="name" class="required-field">Name</label>
+                  <input type="text" id="name" name="name" required>
+              </div> 
+              
+              <div class="form-group">
+                <label for="initial">Initial</label>
+                <input type="text" id="initial" name="initial">
+              </div>
+                    
+                  <div class="form-group">
+                      <label for="husband_wifename" >Husband/Wife Name</label>
+                      <input type="text" id="husband_wifename" name="husband_wifename">
+                  </div> 
+                  
+                  <div class="form-group">
+                    <label for="profession">Profession</label>
+                    <input type="text" id="profession" name="profession" >
+                </div> 
+
+                <div class="form-group">
+                  <label for="ismaternaluncle">Is Maternal Uncle</label>
+                  <select id="ismaternaluncle" name="ismaternaluncle">
+                    <option value="0">No</option>
+                    <option value="1">Yes</option>
+                  </select>
+                </div>
+              </div>
+
+              <div id="address-city" class="form-group">
+                  <div class="form-group">
+                      <label for="address">Address</label>
+                      <textarea id="address" name="address" style="height:35px"></textarea>
+                  </div>                  
+                  
+                  <div class="form-group">
+                    <label for="city" class="required-field">City</label>
+                    <input type="text" id="city" name="city" required>
+                </div> 
+                </div>
+
+              <div class="form-group">
+                <label for="paymentamount" class="required-field"><b>Amount</b></label>
+                <input type="text" id="paymentamount" name="paymentamount" style="height:35px" required>                          
+              </div>
+
+            </div>        
+  
+              <input type="submit" class="btn" value="Submit">
+          </form>  
+          
+          <!----------------------------------- edit Visitor details form starts here ----------------------------------------->
+
+        <div id="editModal" class="editModal">
+          <div class="edit-modal-content">
+              <span class="close">&times;</span> 
+              <h2>Edit Visitor</h2>                    
+              <form id="editVisitorForm" class="two-column-form" >
+
+                  <!-- <input type="hidden" id="user_id" name="user_id" value=""> -->
+                  <input type="hidden" id="visitor_id" name="visitor_id" value="">
+                  <input type="hidden" id="function_id" name="function_id" value="">
+                  <input type="hidden" id="user_id" name="user_id" value="">
+
+          <div class="form-column">
+              <div class="form-field">
+                  <label for="visitor_name" class="required-field">Name</label>
+                  <input type="text" id="visitor_name" name="visitor_name" placeholder="Visitor name.." required>
+              </div>
+
+              <div class="form-field">
+                <label for="visitor_phone_no" class="required-field">Phone Number</label>
+                <input type="tel" name="visitor_phone_no" id="visitor_phone_no" placeholder="Visitor phone no.." required pattern="[0-9]{10}">
+                <!-- <small id="phone_no_error1" class="text-danger" style="color: red;">Please enter a 10-digit phone number.</small> -->
+            </div>
+
+              <div class="form-field">
+                  <label for="visitor_profession">Visitor Profession</label>
+                  <input type="text" id="visitor_profession" name="visitor_profession" placeholder="Visitor Profession">
+              </div>
+
+              <div class="form-field">
+                <label for="visitor_city" class="required-field">City</label>
+                <input type="text" id="visitor_city" name="visitor_city" placeholder="Visitor city.." required>
+            </div>
+
+            <div class="form-field">
+              <label for="visitor_payment" class="required-field">Payment</label>
+              <input type="text" id="visitor_payment" name="visitor_payment" placeholder="Visitor Payment.." required>
+          </div>
+            
+            
+          </div>
+
+          <div class="form-column">
+
+            <div class="form-field">
+              <label for="visitor_initial" >Initial</label>
+              <input type="text" id="visitor_initial" name="visitor_initial" placeholder="Visitor initial..">
+          </div>  
+          
+                  <div class="form-field">
+                      <label for="visitor_husband_or_wifename">Husband/Wife Name</label>
+                      <input type="text" id="visitor_husband_or_wifename" name="visitor_husband_or_wifename" placeholder="Visitor husband/wife name">
+                  </div> 
+                  
+                  <div class="form-field">
+                    <label for="visitor_address">Address</label>
+                    <textarea name="visitor_address" id="visitor_address" placeholder="Visitor Address.." style="height:50px"></textarea>
+                </div>
+                
+                <div class="form-field">
+                  <label for="visitor_isMaternalUncle" class="required-field">Is Maternal Uncle</label>
+                  <select name="visitor_isMaternalUncle" id="visitor_isMaternalUncle">
+                    <option value="0">No</option>
+                    <option value="1">Yes</option>
+                  </select>
+              </div>            
+          </div>
+                  <input type="submit" class="btn" value="Save Changes">
+                </form> 
+              </div>
+            </div>
+
+            </section>
+
+            <section class="table-content">
+            <h2>Visitor List</h2>
+            <button id="export-to-excel-button" class="add-button"> Export to Excel <i class="fas fa-file-excel"></i></button>
+
+            <div id="visitor-details-table">
+                <!-- Visitor details table will be populated here -->
+            </div>
+            <div id="pagination" class="center-pagination">
+                <button id="prev-page">Previous</button>
+                <button id="next-page">Next</button>
+            </div>
+          </section>
+    </main>
+
+    <!-- <footer>
+        <p>&copy; 2023 MOI APP</p>
+    </footer> -->
+
+  </body>
+
+ <!-- ============================================================================================================================================= -->
+
+<script>
+
+const queryString = window.location.search;
+    const urlParams = new URLSearchParams(queryString);
+    const function_id = urlParams.get('id');
+
+const user_id = sessionStorage.getItem("user_id");
+//const loggedInUserType = sessionStorage.getItem("loggedInUserType");
+
+// =====================================  FUNCTION TO VALIDATE THE PHONE NO AND AUTOFILL CALL ===============================================
+function validateAndAutofill() {
+    var phoneInput = document.getElementById("phone_no");
+    var phoneValue = phoneInput.value;
+
+    // Regular expression to check if the input contains exactly 10 numbers
+    var numericRegex = /^\d{10}$/;
+
+    if (!numericRegex.test(phoneValue)) {
+      if (phoneInput.dataset.alertShown !== 'true') {
+        alert("Please enter a valid 10-digit phone number (numbers only).");
+        phoneInput.dataset.alertShown = 'true'; // Set a custom attribute to track that the alert has been shown
+        }
+        phoneInput.value = ""; // Clear the input field
+        phoneInput.focus();    // Put focus back on the input field
+       } else {
+        autofillVisitorData();
+        phoneInput.removeAttribute('data-alert-shown'); // Remove the custom attribute
+    }
+}
+// ==========================================================================================================================================
+
+    const exportButton = document.getElementById('export-to-excel-button');
+
+    exportButton.addEventListener('click', function () {
+  
+  //==============================FOR GETTING THE FUNCTION DATA WHEN CLICKING THE EXPORT TO EXCEL BUTTON STARTS HERE========================================================
+  fetch(`/export-to-excel?id=${function_id}`)
+      .then(response => response.json())        
+      .then(data => {          
+        console.log(data);
+         //console.log(dataWithoutHeader);
+        const header = ['வரிசை எண்','பெயர்', 'இன்ஷியல்', 'கணவன் அல்லது மனைவி பெயர்', 'தொழில்', 'தொலைபேசி எண்', 'முகவரி', 'ஊர்', 'பங்களிப்பு']; 
+        
+        const excelData = [header];
+
+        data.forEach((row,index) => {
+          const rowData = [
+            index + 1,
+            row.visitor_name, 
+            row.visitor_initial,
+            row.visitor_husband_or_wifename,
+            row.visitor_profession,
+            row.visitor_phone_no,
+            row.visitor_address,
+            row.visitor_city,
+            row.visitor_payment,
+          ];
+          excelData.push(rowData);
+        });
+
+        const totalColumnIndex = header.indexOf('பங்களிப்பு');
+        const total = excelData.slice(1).reduce((acc, row) => acc + (row[totalColumnIndex] || 0), 0);
+
+        const lastRowIndex = excelData.length - 1 ;
+        //excelData[lastRowIndex][totalColumnIndex] = total;
+        
+            // Add the "மொத்தம்" header under the last entry of "பங்களிப்பு"
+            const totalRow = [
+            //data.length + 1, 
+            '', // Other columns can be left empty
+            '',
+            '',
+            '',
+            '',
+            '',
+            '',
+            'மொத்தம்', 
+            total, // Leave the cell empty for the total value in "மொத்தம்" column
+
+            ];
+            excelData.splice(lastRowIndex + 1, 0, totalRow); 
+
+            //Generate Excel file
+            const workbook = XLSX.utils.book_new();
+            const worksheet = XLSX.utils.aoa_to_sheet(excelData);
+
+
+            worksheet.protection = {
+              sheet: true,
+              password: '123qwe098', 
+              objects: true,
+              scenarios: true,
+            };
+
+          XLSX.utils.book_append_sheet(workbook, worksheet, 'Visitor List');
+
+          const filename = `visitor_list-${function_id}.xlsx`;
+
+            // Auto-size columns based on content
+            const wscols = [];
+            excelData[0].forEach((header, colIndex) => {
+              let maxColumnWidth = header.length;
+              for (let rowIndex = 1; rowIndex < excelData.length; rowIndex++) {
+                const cellData = excelData[rowIndex][colIndex];
+                if (cellData && cellData.length > maxColumnWidth) {
+                  maxColumnWidth = cellData.length;
+                }
+              }
+              maxColumnWidth += 2;
+              wscols.push({ wch: maxColumnWidth });
+            });
+            for (let i = 0; i < data.length; i++) {
+              wscols.push({ wch: 25 }); 
+            }
+            worksheet['!cols'] = wscols;
+
+            // Generate Excel Blob              
+            const excelBlob = new Blob([XLSX.write(workbook, { bookType: 'xlsx', type: 'array' })],{
+              type: 'application/octet-stream',
+            });              
+
+            // Create a download link for the Excel file
+            const downloadLink = document.createElement('a');
+            downloadLink.href = URL.createObjectURL(excelBlob);
+            //downloadLink.href = blobURL;
+            downloadLink.download = filename;
+            downloadLink.style.display = 'none';
+
+            document.body.appendChild(downloadLink);
+            downloadLink.click();
+
+            document.body.removeChild(downloadLink);
+            //URL.revokeObjectURL(blobURL);
+          })
+        
+          .catch(error => {
+            console.error("Error exporting data to Excel:", error);
+          });
+          
+        })
+        
+        // Function to trigger autofill when the "Phone Number" input field loses focus
+    function autofillVisitorData() {
+          console.log("autofill function called");
+          const phoneNumberInput = document.getElementById('phone_no');
+          if (phoneNumberInput.value) {
+            fetchVisitorData(phoneNumberInput.value);
+          }
+        }
+        // ================================== FUNCTION TO AUTOFILL VISITOR DETAILS USING FETCH API ================================================
+
+  function fetchVisitorData(phoneNumber) {
+    console.log("phone number autofill called");
+          fetch(`/fetchVisitorData?phonenumber=${phoneNumber}`, {
+            method: 'GET',
+            headers: {
+              'Content-Type': 'application/json'
+            },
+          })
+          .then(response => response.json())
+          .then(data => {
+            if (data.success) {
+              console.log(data);
+              const visitorData = data.visitor;             
+              
+              document.getElementById('name').value = visitorData.visitor_name;
+              document.getElementById('initial').value = visitorData.visitor_initial;
+              document.getElementById('profession').value = visitorData.visitor_profession;
+              document.getElementById('husband_wifename').value = visitorData.visitor_husband_or_wifename;
+              document.getElementById('address').value = visitorData.visitor_address;
+              document.getElementById('city').value = visitorData.visitor_city;
+            } //else {
+              // Handle the case where customer data is not found
+              //console.error('Visitor data not found.');              
+           // }
+          })
+          .catch(error => {
+            console.error('Error fetching visitor data:', error);
+          });
+        }   
+    
+
+      document.addEventListener("DOMContentLoaded", function () {
+        const content = document.getElementById("visitor-details-table");
+        const paginationContainer = document.getElementById("pagination");
+        const editIcons = [];
+        const deleteIcons = [];
+        let currentPage = 1; 
+
+        const closeBtn = document.querySelector(".close");
+// ------------------------------------------------------------------------------------------*/
+       // JavaScript to show/hide the pop-up menu
+       const profileIcon = document.getElementById('profile-icon');
+       const popupMenu = document.getElementById('popup-menu');
+   
+       profileIcon.addEventListener('click', () => {
+         console.log("profile icon clicked");
+         popupMenu.style.display = (popupMenu.style.display === 'block') ? 'none' : 'block';
+       });
+   
+       // Close the pop-up menu when clicking outside of it
+       document.addEventListener('click', (e) => {
+         if (!popupMenu.contains(e.target) && e.target !== profileIcon) {
+           popupMenu.style.display = 'none';
+         }
+       });
+ //-------------------------------------------------------------------------------------------------------------------------
+
+ //=================================== GETTING THE WRITER_ID AND FUNCTION_ID FROM SESSION ================================================== 
+
+
+const name = sessionStorage.getItem("name");
+
+    const userNameSpan = document.getElementById("user-name");
+        if (userNameSpan) {
+        userNameSpan.textContent = name;
+        }
+
+// if (writer_id && function_id) {
+//     console.log("Writer ID:", writer_id);
+//     console.log("Function ID:", function_id);
+// } else {
+//     console.log("Writer ID and Function ID not found in session storage.");
+// }
+
+// ========================== FOR VISITOR DETAILS FORM SUBMISSION ==========================================================
+ 
+const visitorForm = document.getElementById('visitor-registration-form');
+  visitorForm.addEventListener('submit', function (event) {
+    event.preventDefault();
+    
+    const name = document.getElementById('name').value;
+    const initial = document.getElementById('initial').value;
+    const phone_no = document.getElementById('phone_no').value;
+    const husband_wifename = document.getElementById('husband_wifename').value;
+    const profession = document.getElementById('profession').value;
+    const ismaternaluncle = document.getElementById('ismaternaluncle').value;
+    const address = document.getElementById('address').value;
+    const city = document.getElementById('city').value;
+    const paymentamount = document.getElementById('paymentamount').value;
+    
+    fetch('/submit-visitor-form', {
+      method: 'POST',
+      headers:{
+            'Content-Type':'application/json',
+            },
+      body: JSON.stringify({name,initial,phone_no,profession,husband_wifename,address,city,ismaternaluncle,paymentamount,user_id,function_id}),
+    })
+      .then(response => response.json())
+      .then(data => {
+        console.log(data);
+        visitorForm.reset();
+        fetchAndDisplayVisitorDetails();
+        // You can handle the response here, e.g., show a success message or redirect the user
+      })
+      .catch(error => {
+        console.error('Error:', error);
+        // Handle errors here, e.g., show an error message to the user
+      });
+  });
+
+// ================================== TO DISPLAY THE VISITOR DETAILS ,PAYMENTS IN A TABLE ==========================================================
+
+//-------------------------------------- Function to create an edit icon --------------------------------------------------
+function createEditIcon() {
+                const editIcon = document.createElement("i");
+                editIcon.classList.add("fas", "fa-edit"); 
+                editIcon.title = "Edit"; 
+                //console.log("Edit icon created"); 
+                return editIcon;
+            }
+
+//------------------------------------- Function to create a delete icon -----------------------------------------------
+        function createDeleteIcon() {
+                const deleteIcon = document.createElement("i");
+                deleteIcon.classList.add("fas", "fa-trash"); 
+                deleteIcon.title = "Delete"; 
+                return deleteIcon;
+            } 
+
+//--------------------------- Function to fetch and visitor writer details-----------------------------------------------
+        
+      function fetchAndDisplayVisitorDetails() {
+        console.log(function_id);
+            console.log("fetchAndDisplayVisitorDetails called");
+            fetch(`/get-visitor-details?id=${function_id}`) 
+                .then(response => response.json())
+                .then(data => {
+                    console.log(data);                    
+                    // Clear the content area
+                    content.innerHTML = "";
+                    
+                    const rowsPerPage = 5;                              
+
+                    totalPages = Math.ceil(data.length / rowsPerPage);
+
+                     // Update the pagination controls
+                    paginationContainer.innerHTML = `
+                        <button id="prev-page" ${currentPage === 1 ? 'disabled' : ''}>Previous</button>
+                        <span>Page ${currentPage} of ${totalPages}</span>
+                        <button id="next-page" ${currentPage === totalPages ? 'disabled' : ''}>Next</button>
+                    `;
+
+                     // Create a table to display writer details
+                    const table = document.createElement("table");
+                    table.classList.add("visitor-table");
+
+                    // Create table headers
+                    const headers = ["SI No", "Name", "Phone No", "City", "Amount", "Actions"];
+                    const headerRow = document.createElement("tr");
+                    headers.forEach(headerText => {
+                        const headerCell = document.createElement("th");
+                        headerCell.textContent = headerText;
+                        headerRow.appendChild(headerCell);
+                    });
+                    table.appendChild(headerRow);
+
+                    // Create a container for the header
+                    const headerContainer = document.createElement("div");
+                    headerContainer.classList.add("header-container");
+                    headerContainer.appendChild(table);
+
+                    // Create a table for the row data
+                    const dataTable = document.createElement("table");
+                    dataTable.classList.add("data-table");                   
+                            
+                    // Calculate the start and end indexes for the current page
+                    const startIndex = (currentPage - 1) * rowsPerPage;
+                    const endIndex = startIndex + rowsPerPage;
+                    
+                    // Slice the data for the current page
+                    const pageData = data.slice(startIndex, endIndex); 
+                    
+                    const calculateSINo = (index) => {
+                        return startIndex + index + 1; // Add 1 to start from 1 instead of 0
+                    };
+                    
+            //Iterate through visitor data and create containers for each row
+                pageData.forEach((visitor, index) => {  
+                    console.log("Inside loop for visitor:", visitor);                   
+
+                    const row = document.createElement("tr");
+
+                    const siNoCell = document.createElement("td");
+                    siNoCell.textContent = calculateSINo(index);
+                    row.appendChild(siNoCell);                 
+
+                        const cells = [
+                        visitor.visitor_name,
+                        visitor.visitor_phone_no,     
+                        visitor.visitor_city,
+                        visitor.visitor_payment,                                                      
+                        ];
+                        cells.forEach((cellText, index) => {
+                            const cell = document.createElement("td");
+                            cell.textContent = cellText;
+                            row.appendChild(cell); 
+
+                            if (index === cells.length -1) {
+                                const actionsCell = document.createElement("td");
+
+                                // Create eye, edit and delete icons
+                                const editIcon = createEditIcon();
+                                const deleteIcon = createDeleteIcon();                                
+
+                                editIcon.style.marginRight = "5px";
+
+                                actionsCell.appendChild(editIcon);
+                                actionsCell.appendChild(deleteIcon);
+
+                                row.appendChild(actionsCell);
+
+                                editIcons.push(editIcon);
+                                deleteIcons.push(deleteIcon);
+                                
+                                row.dataset.visitor_id = visitor.visitor_id;                                                         
+                            } else {
+                                row.appendChild(cell);
+                                }                            
+                        });
+
+                        table.appendChild(row);                                    
+                                          
+                        content.appendChild(headerContainer);
+                        content.appendChild(table);          
+                })                
+                //let writer = {};
+
+                editIcons.forEach(editIcon => {
+                            editIcon.addEventListener("click", function () {
+                                console.log("Edit icon clicked"); 
+                                        // Get the writer data associated with the clicked row
+                                const row = editIcon.closest("tr");
+                                //const phoneNo = row.cells[2].textContent;
+                                const phoneNo = row.cells[2].textContent.split(',')[0].trim();
+
+                                console.log(phoneNo);
+                                
+                                fetch(`/api/get-visitor-details-by-phone?phone=${phoneNo}`)
+                                    .then(response => response.json())
+                                    .then(data => {
+                                        const { user_type } = data;
+                                        console.log("user type",user_type);
+
+                                        // if (user_type == loggedInUserType) {                       
+                                        const { visitor_initial,visitor_phone_no,visitor_husband_or_wifename,visitor_profession,visitor_isMaternalUncle,visitor_address,visitor_id} = data; 
+                                       //console.log(formattedDob);
+                                            const visitor = {
+                                                name: row.cells[1].textContent,
+                                                initial : visitor_initial,
+                                                phone_no: visitor_phone_no,
+                                                husband_wifename: visitor_husband_or_wifename,
+                                                profession : visitor_profession,
+                                                ismaternaluncle : visitor_isMaternalUncle,
+                                                visitor_address: visitor_address,                                    
+                                                visitor_city: row.cells[3].textContent,
+                                                visitor_payment: row.cells[4].textContent,                                                               
+                                                visitor_id : visitor_id,
+                                                function_id : function_id,
+                                                user_id : user_id,
+                                            };
+                                            //console.log("visitor",visitor);
+                                                displayEditForm(visitor);
+                                        // }else{
+                                        //     alert("You do not have permission to edit this record.");
+                                        // }
+                                            });
+                            });
+                        });
+
+                deleteIcons.forEach(deleteIcon => {
+                  deleteIcon.addEventListener("click", function () {
+                    console.log("delete icon clicked"); 
+                    const row = deleteIcon.closest("tr");
+                    const visitor_id = row.dataset.visitor_id;
+                    const visitor_payment = row.cells[4].textContent.trim();                        
+                    //console.log(visitor_payment);
+                    const confirmDelete = confirm("Are you sure you want to delete this Visitor?");
+                    if (confirmDelete) {
+                        // Send an HTTP request to delete the Visitor with this writer_id
+                        fetch(`/delete-visitor`, {
+                            method: "DELETE",
+                            headers: {
+                                "Content-Type": "application/json"
+                            },
+                            body: JSON.stringify({visitor_id,user_id,function_id,visitor_payment})
+                        })
+                        .then(response => response.json())
+                        .then(data => {
+                            if (data.success) {
+                                alert("Visitor deleted successfully");
+                                fetchAndDisplayVisitorDetails();
+                            } else {
+                                alert("Failed to delete Visitor");
+                                fetchAndDisplayVisitorDetails();
+                            }
+                        })
+                        .catch(error => {
+                            console.error("Error:", error);
+                            alert("An error occurred while deleting Visitor");
+                        });
+                    }
+                });
+            });                
+                })
+                .catch(error => {
+                    console.error("Error fetching Visitor details:", error);
+                }); 
+             
+        // Add click event listeners to pagination buttons
+        paginationContainer.addEventListener("click", function (event) {
+            if (event.target.id === "prev-page" && currentPage > 1) {
+                currentPage--;
+                fetchAndDisplayVisitorDetails();
+            } else if (event.target.id === "next-page" && currentPage < totalPages) {
+                currentPage++;
+                console.log("second page called");
+                fetchAndDisplayVisitorDetails();
+            }
+        });       
+        }
+
+        function closeModal() {
+            const editModal = document.querySelector(".editModal");
+            editModal.style.display = "none";
+            document.querySelector(".content").style.display = "block";
+        }
+
+        // Add event listener to close button
+        closeBtn.addEventListener("click", closeModal);
+
+        function displayEditForm(visitor) {
+            //console.log("displayEditForm called");
+            console.log("visitor inside edit form",visitor); 
+            //console.log("received function_id",visitor.function_id);
+            //console.log("received visitor_id",visitor.visitor_id);
+            // Populate the form fields with Visitor data
+            const modal = document.querySelector("#editModal");         
+            modal.style.display = "block";              
+
+            //document.querySelector(".content").style.display = "block";
+            document.querySelector("#editVisitorForm input[name='visitor_id']").value = visitor.visitor_id;
+            document.querySelector("#editVisitorForm input[name='function_id']").value = visitor.function_id;
+            document.querySelector("#editVisitorForm input[name='user_id']").value = visitor.user_id;
+
+            document.querySelector("#editVisitorForm input[name='visitor_name']").value = visitor.name;
+            document.querySelector("#editVisitorForm input[name='visitor_initial']").value = visitor.initial;
+            document.querySelector("#editVisitorForm input[name='visitor_phone_no']").value = visitor.phone_no;
+            const maternalSelect = document.querySelector("#editVisitorForm select[name='visitor_isMaternalUncle']");
+            maternalSelect.value = visitor.ismaternaluncle;
+            document.querySelector("#editVisitorForm input[name='visitor_husband_or_wifename']").value = visitor.husband_wifename;
+            document.querySelector("#editVisitorForm input[name='visitor_profession']").value = visitor.profession;
+
+            document.querySelector("#editVisitorForm textarea[name='visitor_address']").value = visitor.visitor_address;
+            document.querySelector("#editVisitorForm input[name='visitor_city']").value = visitor.visitor_city;
+            document.querySelector("#editVisitorForm input[name='visitor_payment']").value = visitor.visitor_payment;   
+            
+    }
+
+    // ============================================ EVENT LISTENER TO SUBMIT EDIT VISITOR DETAILS ==========================================
+    editVisitorForm.addEventListener("submit", function (event) {
+            event.preventDefault();            
+            console.log("submit button clicked");
+            
+            const user_id = document.getElementById('user_id').value;
+            const function_id = document.getElementById('function_id').value;
+            const visitor_id = document.getElementById('visitor_id').value;
+            const name = document.getElementById('visitor_name').value;
+            const initial = document.getElementById('visitor_initial').value;
+            const phone_no = document.getElementById('visitor_phone_no').value;
+            const husband_wifename = document.getElementById('visitor_husband_or_wifename').value;
+            const profession = document.getElementById('visitor_profession').value;
+            const ismaternaluncle = document.getElementById('visitor_isMaternalUncle').value;
+            const visitor_address = document.getElementById('visitor_address').value;
+            const visitor_city = document.getElementById('visitor_city').value;
+            const visitor_payment = document.getElementById('visitor_payment').value;
+            //const user_id= document.getElementById('user_id').value;
+            
+            fetch("/update-visitor-data", {
+                method: "POST",
+                headers:{
+                    'Content-Type':'application/json',
+                 },
+                body: JSON.stringify({user_id,function_id,visitor_id,name,initial,phone_no,husband_wifename,profession,ismaternaluncle,visitor_address,visitor_city,visitor_payment}),
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log(data);
+                if (data.success) {
+                    alert("visitor data updated successfully");
+                    fetchAndDisplayVisitorDetails();
+                    // Handle success, e.g., close modal or update UI
+                } else {
+                    alert("Failed to update visitor data");
+                    fetchAndDisplayVisitorDetails();
+                    // Handle failure
+                }
+            })
+            .catch(error => {
+                console.error("Error:", error);
+                alert("An error occurred while updating visitor data");
+            });
+            closeModal();
+        });
+        fetchAndDisplayVisitorDetails();
+      }); 
+ </script>
+
+</html>
